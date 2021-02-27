@@ -145,6 +145,11 @@ namespace GreenBottle
                 newPlayerPosition = RandomPosition(); // seems to be woring but leave old map glyph in place of previous spot
             }
 
+            if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.F6))
+            {
+                newPlayerPosition = RandomPosition();
+            }
+
             // movement keys
             //? move IsWalkable to out of specific map, then pass map along with X, Y cordinates (DungeonMap and CaveMap) 
             //? create ActiveMap variable and send DungeonMap and CaveMap to it
