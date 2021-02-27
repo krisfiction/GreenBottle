@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 using Console = SadConsole.Console;
 
 namespace GreenBottle
@@ -860,29 +861,33 @@ namespace GreenBottle
         //    }
         //}
 
-        //! this is horribly slow
-        //public void POV(int posX, int posY)
-        //{
-        //    Tile CurrentTile = (Tile)GameMap[posX, posY];
-        //    string _icon = CurrentTile.Icon;
+        //! currently in GameScreen.ProcessKeyboard() - needs work
+        public void LightRadius(Console console, int posX, int posY)
+        {
+            for (int x = 0; x <= MapSizeX - 1; x++)
+            {
+                for (int y = 0; y <= MapSizeY - 1; y++)
+                {
+                    //fill everything
+                    console.SetForeground(x, y, Color.White);
+                    console.SetBackground(x, y, Color.Black);
+                    
+                }
+            }
 
-        //    for (int x = (posX - 1); x <= (posX + 1); x++)
-        //    {
-        //        for (int y = (posY - 1); y <= (posY + 1); y++)
-        //        {
-        //            if (posX != 0 && posY != 0)
-        //            {
-        //                CurrentTile = (Tile)GameMap[x, y];
-        //                _icon = CurrentTile.Icon;
-
-        //                Console.SetCursorPosition(x, y);
-        //                Console.BackgroundColor = ConsoleColor.Blue;
-        //                Console.WriteLine(_icon);
-        //            }
-        //        }
-        //    }
-        //    Console.BackgroundColor = ConsoleColor.Black;
-        //}
+            for (int x = (posX - 1); x <= (posX + 1); x++)
+            {
+                for (int y = (posY - 1); y <= (posY + 1); y++)
+                {
+                    if (posX != 0 && posY != 0)
+                    {
+                        //fill around player
+                        console.SetForeground(x, y, Color.Black);
+                        console.SetBackground(x, y, Color.White);
+                    }
+                }
+            }
+        }
 
         //public void PlacePlayer(Player player)
         //{

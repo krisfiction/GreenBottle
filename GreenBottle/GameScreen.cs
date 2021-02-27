@@ -89,6 +89,7 @@ namespace GreenBottle
             DungeonMap.Initialize();
             //dungeonMap.CreateOneRoom();
 
+            
             DungeonMap.Display(MapConsole);
 
             CreatePlayer();
@@ -127,6 +128,8 @@ namespace GreenBottle
             //} while (_isHallway && !_isWalkable); // broken
 
             //MapConsole.Print(1, 1, $"isHallway: {_isHallway}, isWalkable: {_isWalkable}"); //testing
+
+
             return _point;
         }
 
@@ -150,6 +153,7 @@ namespace GreenBottle
                 if (DungeonMap.IsWalkable(newPlayerPosition.X, newPlayerPosition.Y - 1))
                 {
                     newPlayerPosition += SadConsole.Directions.North;
+                    DungeonMap.LightRadius(MapConsole, _playerPosition.X, _playerPosition.Y); //todo needs work
                 }
             }
 
@@ -208,6 +212,8 @@ namespace GreenBottle
                     newPlayerPosition += SadConsole.Directions.SouthEast;
                 }
             }
+
+            DungeonMap.LightRadius(MapConsole, _playerPosition.X, _playerPosition.Y);
 
             if (newPlayerPosition != PlayerPosition)
             {
