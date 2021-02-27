@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Console = SadConsole.Console;
 
 namespace GreenBottle
@@ -76,6 +75,8 @@ namespace GreenBottle
 
         public void Reset()
         {
+            FillMap();
+            FillRooms();
             NumberOfRooms = 0;
             NumberOfHallways = 0;
             GameMap.Initialize();
@@ -801,19 +802,21 @@ namespace GreenBottle
             }
         }
 
-        public static bool IsWalkable(int x, int y)
+        public bool IsWalkable(int x, int y)
         {
-            Tile tile = GameMap[x, y];
-            return tile.IsWalkable;
+            //Tile tile = GameMap[x, y];
+            //return tile.IsWalkable;
+
+            return GameMap[x, y].IsWalkable;
         }
 
-        public static bool IsHallway(int x, int y)
+        public bool IsHallway(int x, int y)
         {
-            Tile tile = GameMap[x, y];
-            return tile.IsHallway;
+            //Tile tile = GameMap[x, y];
+            //return tile.IsHallway;
+
+            return GameMap[x, y].IsHallway;
         }
-
-
 
         //public void Display()
         //{

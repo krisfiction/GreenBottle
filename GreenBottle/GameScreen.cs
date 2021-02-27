@@ -9,11 +9,7 @@ namespace GreenBottle
     public class GameScreen : ContainerConsole
     {
         public Console MapConsole { get; }
-
-        //public int mapConsoleWidth = (int)((Global.RenderWidth / Global.FontDefault.Size.X) * 1.0);
-        //public int mapConsoleHeight = (int)((Global.RenderHeight / Global.FontDefault.Size.Y) * 1.0);
         public const int mapConsoleWidth = 110;
-
         public const int mapConsoleHeight = 35;
         public const int mapConsolePOSx = 0;
         public const int mapConsolePOSy = 0;
@@ -29,8 +25,9 @@ namespace GreenBottle
         private Point _playerPosition;
         private Cell _playerPositionMapGlyph;
 
-        public static CaveMap CaveMap { get; }
-        public static DungeonMap DungeonMap { get; }
+        // public static CaveMap CaveMap { get; }
+        // public static DungeonMap DungeonMap { get; }
+        public DungeonMap DungeonMap;
 
         private readonly Random random = new Random();
 
@@ -40,8 +37,6 @@ namespace GreenBottle
             private set
             {
                 // set boundry for player
-                // change value 1 to 0 to make it be the edge of the screen
-                //if (value.X < 1 || value.X >= MapConsole.Width - 1 || value.Y < 1 || value.Y >= MapConsole.Height - 1)
                 if (value.X < 0 || value.X >= MapConsole.Width || value.Y < 0 || value.Y >= MapConsole.Height)
                 {
                     return;
@@ -62,6 +57,8 @@ namespace GreenBottle
 
         public GameScreen()
         {
+            DungeonMap = new DungeonMap();
+
             // Setup map
             MapConsole = new Console(mapConsoleWidth, mapConsoleHeight) //size of window
             {
@@ -87,15 +84,12 @@ namespace GreenBottle
 
             //caveMap.Display(MapConsole);
 
-            DungeonMap dungeonMap = new DungeonMap();
+            //DungeonMap dungeonMap = new DungeonMap();
 
-            dungeonMap.Initialize();
+            DungeonMap.Initialize();
             //dungeonMap.CreateOneRoom();
 
-            dungeonMap.Display(MapConsole);
-
-
-
+            DungeonMap.Display(MapConsole);
 
             CreatePlayer();
         }
@@ -106,7 +100,7 @@ namespace GreenBottle
             PlayerGlyph = new Cell(Color.Red, Color.Black, 64); // 64 = @
 
             //_playerPosition = new Point(random.Next(1, mapConsoleWidth), random.Next(1, mapConsoleHeight));
-            RandomPosition();
+            _playerPosition = RandomPosition();
 
             _playerPositionMapGlyph = new Cell();
             _playerPositionMapGlyph.CopyAppearanceFrom(MapConsole[_playerPosition.X, _playerPosition.Y]);
@@ -114,20 +108,26 @@ namespace GreenBottle
         }
 
         //check if random starting position is walkable and not a hallway
-        public void RandomPosition()
+        public Point RandomPosition()
         {
-            int _x;
-            int _y;
             bool _isWalkable;
             bool _isHallway;
+            Point _point;
+
             do
             {
-                _x = random.Next(0, mapConsoleWidth - 1);
-                _y = random.Next(0, mapConsoleHeight - 1);
-                _isWalkable = DungeonMap.IsWalkable(_x, _y);
-                _isHallway = DungeonMap.IsHallway(_x, _y);
-            } while (!_isWalkable && !_isHallway);
-            _playerPosition = new Point(_x, _y);
+                do
+                {
+                    _point.X = random.Next(0, mapConsoleWidth - 1);
+                    _point.Y = random.Next(0, mapConsoleHeight - 1);
+                    _isHallway = DungeonMap.IsHallway(_point.X, _point.Y);
+                    _isWalkable = DungeonMap.IsWalkable(_point.X, _point.Y);
+                } while (_isHallway);
+            } while (!_isWalkable);
+            //} while (_isHallway && !_isWalkable); // broken
+
+            //MapConsole.Print(1, 1, $"isHallway: {_isHallway}, isWalkable: {_isWalkable}"); //testing
+            return _point;
         }
 
         public override bool ProcessKeyboard(Keyboard info)
@@ -136,13 +136,15 @@ namespace GreenBottle
 
             if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.F5))
             {
-                //RandomPosition();
-                //_playerPositionMapGlyph.CopyAppearanceFrom(MapConsole[PlayerPosition.X, PlayerPosition.Y]);
-                //PlayerGlyph.CopyAppearanceTo(MapConsole[newPlayerPosition.X, newPlayerPosition.Y]);
+                DungeonMap.Initialize();
+                DungeonMap.Display(MapConsole);
+
+                newPlayerPosition = RandomPosition(); // seems to be woring but leave old map glyph in place of previous spot
             }
 
             // movement keys
-            //todo add all 8 directions using numpad
+            //? move IsWalkable to out of specific map, then pass map along with X, Y cordinates (DungeonMap and CaveMap) 
+            //? create ActiveMap variable and send DungeonMap and CaveMap to it
             if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Up) || info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.NumPad8))
             {
                 if (DungeonMap.IsWalkable(newPlayerPosition.X, newPlayerPosition.Y - 1))
