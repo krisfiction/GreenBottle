@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using System;
 using Console = SadConsole.Console;
 
 namespace GreenBottle
@@ -871,7 +871,6 @@ namespace GreenBottle
                     //fill everything
                     console.SetForeground(x, y, Color.White);
                     console.SetBackground(x, y, Color.Black);
-                    
                 }
             }
 

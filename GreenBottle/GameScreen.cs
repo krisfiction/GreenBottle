@@ -14,20 +14,28 @@ namespace GreenBottle
         public const int mapConsolePOSx = 0;
         public const int mapConsolePOSy = 0;
 
-        public Console ActivityLogWindow { get; }
-        public const int ActivityLogWindowWidth = 110;
-        public const int ActivityLogWindowHeight = 10;
-        public const int ActivityLogWindowPOSx = 0;
-        public const int ActivityLogWindowPOSy = 35;
+        public Console ActivityLogConsole { get; }
+        public const int ActivityLogConsoleWidth = 110;
+        public const int ActivityLogConsoleHeight = 10;
+        public const int ActivityLogConsolePOSx = 0;
+        public const int ActivityLogConsolePOSy = 35;
+
+        public Console StatsConsole { get; }
+        public const int StatsConsoleWidth = 30;
+        public const int StatsConsoleHeight = 35;
+        public const int StatsConsolePOSx = 110;
+        public const int StatsConsolePOSy = 0;
+
+        public DungeonMap DungeonMap;
+        public ActivityLog ActivityLog;
+        public Stats Stats;
 
         public Cell PlayerGlyph { get; set; }
 
+        // public Point MyPoisition = new Point(4, 5); // testing
+
         private Point _playerPosition;
         private Cell _playerPositionMapGlyph;
-
-        // public static CaveMap CaveMap { get; }
-        // public static DungeonMap DungeonMap { get; }
-        public DungeonMap DungeonMap;
 
         private readonly Random random = new Random();
 
@@ -58,6 +66,8 @@ namespace GreenBottle
         public GameScreen()
         {
             DungeonMap = new DungeonMap();
+            ActivityLog = new ActivityLog();
+            Stats = new Stats();
 
             // Setup map
             MapConsole = new Console(mapConsoleWidth, mapConsoleHeight) //size of window
@@ -68,10 +78,19 @@ namespace GreenBottle
             };
 
             // Setup Log
-            ActivityLogWindow = new Console(ActivityLogWindowWidth, ActivityLogWindowHeight) //size on window
+            ActivityLogConsole = new Console(ActivityLogConsoleWidth, ActivityLogConsoleHeight) //size on window
             {
-                Position = new Point(ActivityLogWindowPOSx, ActivityLogWindowPOSy), //position of window
-                DefaultBackground = Color.DarkGray,
+                Position = new Point(ActivityLogConsolePOSx, ActivityLogConsolePOSy), //position of window
+                DefaultBackground = Color.Black,
+                DefaultForeground = Color.White,
+                Parent = this
+            };
+
+            // Setup Stats
+            StatsConsole = new Console(StatsConsoleWidth, StatsConsoleHeight) //size on window = 30, 35
+            {
+                Position = new Point(StatsConsolePOSx, StatsConsolePOSy), //position of window = 110, 0
+                DefaultBackground = Color.Black,
                 Parent = this
             };
 
@@ -89,8 +108,7 @@ namespace GreenBottle
             DungeonMap.Initialize();
             //dungeonMap.CreateOneRoom();
 
-            
-            DungeonMap.Display(MapConsole);
+            UpdateDisplay();
 
             CreatePlayer();
         }
@@ -129,7 +147,6 @@ namespace GreenBottle
 
             //MapConsole.Print(1, 1, $"isHallway: {_isHallway}, isWalkable: {_isWalkable}"); //testing
 
-
             return _point;
         }
 
@@ -151,14 +168,14 @@ namespace GreenBottle
             }
 
             // movement keys
-            //? move IsWalkable to out of specific map, then pass map along with X, Y cordinates (DungeonMap and CaveMap) 
+            //? move IsWalkable to out of specific map, then pass map along with X, Y cordinates (DungeonMap and CaveMap)
             //? create ActiveMap variable and send DungeonMap and CaveMap to it
             if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Up) || info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.NumPad8))
             {
                 if (DungeonMap.IsWalkable(newPlayerPosition.X, newPlayerPosition.Y - 1))
                 {
                     newPlayerPosition += SadConsole.Directions.North;
-                    DungeonMap.LightRadius(MapConsole, _playerPosition.X, _playerPosition.Y); //todo needs work
+                    ActivityLog.AddToLog("You move North.");
                 }
             }
 
@@ -167,6 +184,7 @@ namespace GreenBottle
                 if (DungeonMap.IsWalkable(newPlayerPosition.X, newPlayerPosition.Y + 1))
                 {
                     newPlayerPosition += SadConsole.Directions.South;
+                    ActivityLog.AddToLog("You move South.");
                 }
             }
 
@@ -175,6 +193,7 @@ namespace GreenBottle
                 if (DungeonMap.IsWalkable(newPlayerPosition.X - 1, newPlayerPosition.Y))
                 {
                     newPlayerPosition += SadConsole.Directions.West;
+                    ActivityLog.AddToLog("You move West.");
                 }
             }
 
@@ -183,6 +202,7 @@ namespace GreenBottle
                 if (DungeonMap.IsWalkable(newPlayerPosition.X + 1, newPlayerPosition.Y))
                 {
                     newPlayerPosition += SadConsole.Directions.East;
+                    ActivityLog.AddToLog("You move East.");
                 }
             }
 
@@ -191,6 +211,7 @@ namespace GreenBottle
                 if (DungeonMap.IsWalkable(newPlayerPosition.X - 1, newPlayerPosition.Y - 1))
                 {
                     newPlayerPosition += SadConsole.Directions.NorthWest;
+                    ActivityLog.AddToLog("You move NorthWest.");
                 }
             }
 
@@ -199,6 +220,7 @@ namespace GreenBottle
                 if (DungeonMap.IsWalkable(newPlayerPosition.X + 1, newPlayerPosition.Y - 1))
                 {
                     newPlayerPosition += SadConsole.Directions.NorthEast;
+                    ActivityLog.AddToLog("You move NorthEast.");
                 }
             }
 
@@ -207,6 +229,7 @@ namespace GreenBottle
                 if (DungeonMap.IsWalkable(newPlayerPosition.X - 1, newPlayerPosition.Y + 1))
                 {
                     newPlayerPosition += SadConsole.Directions.SouthWest;
+                    ActivityLog.AddToLog("You move SouthWest.");
                 }
             }
 
@@ -215,6 +238,7 @@ namespace GreenBottle
                 if (DungeonMap.IsWalkable(newPlayerPosition.X + 1, newPlayerPosition.Y + 1))
                 {
                     newPlayerPosition += SadConsole.Directions.SouthEast;
+                    ActivityLog.AddToLog("You move SouthEast.");
                 }
             }
 
@@ -226,7 +250,17 @@ namespace GreenBottle
                 return true;
             }
 
+            //UpdateDisplay();
+            ActivityLog.Display(ActivityLogConsole);
+
             return false;
+        }
+
+        public void UpdateDisplay()
+        {
+            DungeonMap.Display(MapConsole);
+            ActivityLog.Display(ActivityLogConsole);
+            Stats.Display(StatsConsole);
         }
     }
 }
