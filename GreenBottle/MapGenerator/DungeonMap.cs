@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GreenBottle.Characters;
+using Microsoft.Xna.Framework;
 using System;
 using Console = SadConsole.Console;
 
@@ -945,33 +946,33 @@ namespace GreenBottle
         //    return (item.X, item.Y);
         //}
 
-        //public (int X, int Y) PlaceMonster(Monster monster)
-        //{
-        //    Random random = new Random();
-        //    int _placed = 0;
+        public (int X, int Y) PlaceMonster(Monster monster)
+        {
+            Random random = new Random();
+            int _placed = 0;
 
-        //    do
-        //    {
-        //        int _randX = random.Next(0, MapSizeX);
-        //        int _randY = random.Next(0, MapSizeY);
+            do
+            {
+                int _randX = random.Next(0, MapSizeX);
+                int _randY = random.Next(0, MapSizeY);
 
-        //        Tile CurrentTile = (Tile)GameMap[_randX, _randY];
-        //        bool _iswalkable = CurrentTile.IsWalkable;
-        //        bool _ishallway = CurrentTile.IsHallway;
+                Tile CurrentTile = (Tile)GameMap[_randX, _randY];
+                bool _iswalkable = CurrentTile.IsWalkable;
+                bool _ishallway = CurrentTile.IsHallway;
 
-        //        if (_iswalkable && _placed == 0 && !_ishallway) //? remove !_ishallway to allow monster to spawn in hallway
-        //        {
-        //            CurrentTile.Icon = monster.Icon;
-        //            _placed = 1;
-        //            CurrentTile.IsMonster = true;
-        //            CurrentTile.IsWalkable = false;
+                if (_iswalkable && _placed == 0 && !_ishallway) //? remove !_ishallway to allow monster to spawn in hallway
+                {
+                    CurrentTile.Icon = monster.Icon;
+                    _placed = 1;
+                    CurrentTile.IsMonster = true;
+                    CurrentTile.IsWalkable = false;
 
-        //            monster.X = _randX;
-        //            monster.Y = _randY;
-        //        }
-        //    } while (_placed == 0);
-        //    return (monster.X, monster.Y);
-        //}
+                    monster.X = _randX;
+                    monster.Y = _randY;
+                }
+            } while (_placed == 0);
+            return (monster.X, monster.Y);
+        }
 
         ////? rename to ChangeTileIconToFloor(X, Y)
         ////? or expand to ChangeTileIcon(X, Y, Icon)

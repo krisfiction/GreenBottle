@@ -44,6 +44,13 @@
         }
 
         // old data below
+
+
+        public int Health { get; set; }
+        public int HealthMax { get; set; }
+
+
+
         public int Gold { get; set; }
 
         public int WeaponDamageLow { get; set; }

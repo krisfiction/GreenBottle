@@ -3,6 +3,10 @@ using SadConsole;
 using SadConsole.Input;
 using System;
 using Console = SadConsole.Console;
+using GreenBottle.Characters;
+using GreenBottle.Characters.Monsters;
+using System.Collections.Generic;
+using GreenBottle.Generator;
 
 namespace GreenBottle
 {
@@ -38,6 +42,8 @@ namespace GreenBottle
         private Cell _playerPositionMapGlyph;
 
         private readonly Random random = new Random();
+        
+        private static List<Monster> activeMonsters = new List<Monster>();
 
         public Point PlayerPosition
         {
@@ -108,9 +114,32 @@ namespace GreenBottle
             DungeonMap.Initialize();
             //dungeonMap.CreateOneRoom();
 
+
+            List<Monster> activeMonsters = new List<Monster>();
+
+            //generate 5 monsters
+            for (int i = 0; i < 5; i++)
+            {
+                activeMonsters.Add(Generate.Monster());
+            }
+
+            //add monsters to map
+            for (int i = 0; i < activeMonsters.Count; i++)
+            {
+                var (x, y) = DungeonMap.PlaceMonster(activeMonsters[i]);
+
+                activeMonsters[i].X = x;
+                activeMonsters[i].Y = y;
+            }
+
+
+
+
             UpdateDisplay();
 
             CreatePlayer();
+
+            //UpdateDisplay();
         }
 
         public void CreatePlayer()
