@@ -7,6 +7,9 @@ using GreenBottle.Characters;
 using GreenBottle.Characters.Monsters;
 using System.Collections.Generic;
 using GreenBottle.Generator;
+using GreenBottle.Items;
+using GreenBottle.Items.Potions;
+using GreenBottle.Items.Scrolls;
 
 namespace GreenBottle
 {
@@ -31,8 +34,10 @@ namespace GreenBottle
         public const int StatsConsolePOSy = 0;
 
         public DungeonMap DungeonMap;
-        public ActivityLog ActivityLog;
+        //public ActivityLog ActivityLog;
         public Stats Stats;
+
+        public Player Player;
 
         public Cell PlayerGlyph { get; set; }
 
@@ -44,8 +49,9 @@ namespace GreenBottle
         private readonly Random random = new Random();
         
         private static List<Monster> activeMonsters = new List<Monster>();
+        private static List<Item> activeItems = new List<Item>();
 
-        public Point PlayerPosition
+        public Point PlayerPosition //? redo this or get rid of it
         {
             get => _playerPosition;
             private set
@@ -72,8 +78,9 @@ namespace GreenBottle
         public GameScreen()
         {
             DungeonMap = new DungeonMap();
-            ActivityLog = new ActivityLog();
-            Stats = new Stats();
+            //ActivityLog = new ActivityLog(); //made static
+            Stats = new Stats(); //? make static as well
+            Player = new Player();
 
             // Setup map
             MapConsole = new Console(mapConsoleWidth, mapConsoleHeight) //size of window
@@ -100,6 +107,12 @@ namespace GreenBottle
                 Parent = this
             };
 
+            StartGame();
+
+        }
+
+        public void StartGame()
+        {
             //CaveMap caveMap = new CaveMap();
 
             //caveMap.Initialize(40);
@@ -115,6 +128,8 @@ namespace GreenBottle
             //dungeonMap.CreateOneRoom();
 
 
+
+            //START monster coode
             List<Monster> activeMonsters = new List<Monster>();
 
             //generate 5 monsters
@@ -131,9 +146,29 @@ namespace GreenBottle
                 activeMonsters[i].X = x;
                 activeMonsters[i].Y = y;
             }
+            //END monster code
 
 
+            //START item code
+            for (int i = 0; i < 3; i++)
+            {
+                activeItems.Add(Generate.Potion());
+                activeItems.Add(Generate.Scroll());
+            }
+            //add items to map
+            for (int i = 0; i < activeItems.Count; i++)
+            {
+                var (x, y) = DungeonMap.PlaceItem(activeItems[i]);
 
+                activeItems[i].X = x;
+                activeItems[i].Y = y;
+            }
+            //END item code
+
+            //START inventory code
+            Inventory inventory = new Inventory();
+            inventory.Initialize();
+            //END inventory code
 
             UpdateDisplay();
 
@@ -141,6 +176,11 @@ namespace GreenBottle
 
             //UpdateDisplay();
         }
+
+
+
+
+
 
         public void CreatePlayer()
         {
@@ -153,6 +193,15 @@ namespace GreenBottle
             _playerPositionMapGlyph = new Cell();
             _playerPositionMapGlyph.CopyAppearanceFrom(MapConsole[_playerPosition.X, _playerPosition.Y]);
             PlayerGlyph.CopyAppearanceTo(MapConsole[_playerPosition.X, _playerPosition.Y]);
+
+
+            Player.Name = "Tunk";
+            Player.HPMax = 100;
+            Player.HP = 100;
+            Player.X = _playerPosition.X;
+            Player.Y = _playerPosition.Y;
+            
+
         }
 
         //check if random starting position is walkable and not a hallway
@@ -185,9 +234,13 @@ namespace GreenBottle
 
             if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.F5))
             {
-                DungeonMap.Initialize();
-                DungeonMap.Display(MapConsole);
+                //DungeonMap.Initialize();
+                //DungeonMap.Display(MapConsole);
 
+                //newPlayerPosition = RandomPosition(); // seems to be woring but leave old map glyph in place of previous spot
+
+
+                StartGame();
                 newPlayerPosition = RandomPosition(); // seems to be woring but leave old map glyph in place of previous spot
             }
 
@@ -271,11 +324,43 @@ namespace GreenBottle
                 }
             }
 
-            DungeonMap.LightRadius(MapConsole, _playerPosition.X, _playerPosition.Y);
+
+            if(info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.G))
+            {
+                for (int i = 0; i < activeItems.Count; i++)
+                {
+                    if (activeItems[i].X == _playerPosition.X && activeItems[i].Y == _playerPosition.Y)
+                    {
+                        ActivityLog.AddToLog("you pick up " + activeItems[i].Name);
+
+                        if (activeItems[i].Type == "Potion")
+                        {
+                            Inventory.PotionInventory.Add((Health)activeItems[i]);
+                        }
+                        if (activeItems[i].Type == "Scroll")
+                        {
+                            Inventory.ScrollInventory.Add((Teleportation)activeItems[i]);
+                        }
+
+                        activeItems.RemoveAt(i); // remove item from active list
+
+                        DungeonMap.ProcessItemTile(Player); //set tile.IsItem to false
+                    }
+                }
+            }
+
+
+
+
+            //DungeonMap.LightRadius(MapConsole, _playerPosition.X, _playerPosition.Y); //testing
 
             if (newPlayerPosition != PlayerPosition)
             {
                 PlayerPosition = newPlayerPosition;
+
+                Player.X = newPlayerPosition.X;
+                Player.Y = newPlayerPosition.Y;
+                
                 return true;
             }
 

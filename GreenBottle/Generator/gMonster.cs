@@ -16,7 +16,7 @@ namespace GreenBottle.Generator
             {
                 case 1:
                     Rat rat = new Rat();
-                    rat.HealthMax = rat.Health = rat.SetHealth();
+                    //rat.HealthMax = rat.Health = rat.SetHealth(); //moved to Rat.cs
                     return rat;
                 case 2:
                     Skeleton skeleton = new Skeleton();
