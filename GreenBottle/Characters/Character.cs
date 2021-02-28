@@ -8,10 +8,42 @@
         public int X;
         public int Y;
 
-        public int Health { get; set; }
+        private int _hp;
+        private int _hpMax;
 
-        public int HealthMax { get; set; }
+        public int HP
+        {
+            get
+            {
+                return _hp;
+            }
+            set
+            {
+                _hp = value;
+            }
+        }
 
+        public int HPMax
+        {
+            get
+            {
+                return _hpMax;
+            }
+            set
+            {
+                _hpMax = value;
+            }
+        }
+
+        public int HPPercentage
+        {
+            get
+            {
+                return _hp / _hpMax * 100;
+            }
+        }
+
+        // old data below
         public int Gold { get; set; }
 
         public int WeaponDamageLow { get; set; }
