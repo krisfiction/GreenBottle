@@ -3,7 +3,7 @@ using SadConsole;
 
 namespace GreenBottle.Characters
 {
-    public class Player
+    public class Player : Character
     {
         public int Mana { get; set; }
     }

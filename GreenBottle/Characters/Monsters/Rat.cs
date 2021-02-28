@@ -15,6 +15,8 @@ namespace GreenBottle.Characters.Monsters
             Gold = 10;
             WeaponDamageLow = 2;
             WeaponDamageHigh = 10;
+
+            HealthMax = Health = SetHealth();
         }
     }
 }

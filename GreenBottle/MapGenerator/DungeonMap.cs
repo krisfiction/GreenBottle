@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using System;
 using Console = SadConsole.Console;
+using GreenBottle.Items;
 
 namespace GreenBottle
 {
@@ -889,62 +890,62 @@ namespace GreenBottle
             }
         }
 
-        //public void PlacePlayer(Player player)
-        //{
-        //    Random random = new Random();
-        //    int _placed = 0;
+        public void PlacePlayer(Player player)
+        {
+            Random random = new Random();
+            int _placed = 0;
 
-        //    do
-        //    {
-        //        int _randX = random.Next(0, MapSizeX);
-        //        int _randY = random.Next(0, MapSizeY);
+            do
+            {
+                int _randX = random.Next(0, MapSizeX);
+                int _randY = random.Next(0, MapSizeY);
 
-        //        Tile CurrentTile = (Tile)GameMap[_randX, _randY];
-        //        bool _iswalkable = CurrentTile.IsWalkable;
-        //        bool _ishallway = CurrentTile.IsHallway;
+                Tile CurrentTile = (Tile)GameMap[_randX, _randY];
+                bool _iswalkable = CurrentTile.IsWalkable;
+                bool _ishallway = CurrentTile.IsHallway;
 
-        //        if (_iswalkable && _placed == 0 && !_ishallway)
-        //        {
-        //            CurrentTile.Icon = PlayerIcon;
-        //            CurrentTile.IsWalkable = false;
+                if (_iswalkable && _placed == 0 && !_ishallway)
+                {
+                    CurrentTile.Icon = PlayerIcon;
+                    CurrentTile.IsWalkable = false;
 
-        //            player.X = _randX;
-        //            player.Y = _randY;
-        //            _placed = 1;
-        //        }
-        //    } while (_placed == 0);
+                    player.X = _randX;
+                    player.Y = _randY;
+                    _placed = 1;
+                }
+            } while (_placed == 0);
 
-        //    //StatBar.Display(player);
-        //}
+            //StatBar.Display(player);
+        }
 
-        //public (int X, int Y) PlaceItem(Item item)
-        //{
-        //    Random random = new Random();
-        //    int _placed = 0;
+        public (int X, int Y) PlaceItem(Item item)
+        {
+            Random random = new Random();
+            int _placed = 0;
 
-        //    do
-        //    {
-        //        int _randX = random.Next(0, MapSizeX);
-        //        int _randY = random.Next(0, MapSizeY);
+            do
+            {
+                int _randX = random.Next(0, MapSizeX);
+                int _randY = random.Next(0, MapSizeY);
 
-        //        Tile CurrentTile = (Tile)GameMap[_randX, _randY];
-        //        bool _iswalkable = CurrentTile.IsWalkable;
-        //        bool _ishallway = CurrentTile.IsHallway;
-        //        bool _isitem = CurrentTile.IsItem;
+                Tile CurrentTile = (Tile)GameMap[_randX, _randY];
+                bool _iswalkable = CurrentTile.IsWalkable;
+                bool _ishallway = CurrentTile.IsHallway;
+                bool _isitem = CurrentTile.IsItem;
 
-        //        if (_iswalkable && _placed == 0 && !_ishallway && !_isitem) //? remove !_ishallway to allow item to spawn in hallway
-        //        {
-        //            CurrentTile.Icon = item.Icon;
-        //            _placed = 1;
-        //            CurrentTile.IsWalkable = true;
-        //            CurrentTile.IsItem = true;
+                if (_iswalkable && _placed == 0 && !_ishallway && !_isitem) //? remove !_ishallway to allow item to spawn in hallway
+                {
+                    CurrentTile.Icon = item.Icon;
+                    _placed = 1;
+                    CurrentTile.IsWalkable = true;
+                    CurrentTile.IsItem = true;
 
-        //            item.X = _randX;
-        //            item.Y = _randY;
-        //        }
-        //    } while (_placed == 0);
-        //    return (item.X, item.Y);
-        //}
+                    item.X = _randX;
+                    item.Y = _randY;
+                }
+            } while (_placed == 0);
+            return (item.X, item.Y);
+        }
 
         public (int X, int Y) PlaceMonster(Monster monster)
         {
@@ -976,25 +977,25 @@ namespace GreenBottle
 
         ////? rename to ChangeTileIconToFloor(X, Y)
         ////? or expand to ChangeTileIcon(X, Y, Icon)
-        //public void ChangeTileIcon(int X, int Y)
-        //{
-        //    Tile CurrentTile = (Tile)GameMap[X, Y];
-        //    CurrentTile.Icon = FloorIcon;
-        //}
+        public void ChangeTileIcon(int X, int Y)
+        {
+            Tile CurrentTile = (Tile)GameMap[X, Y];
+            CurrentTile.Icon = FloorIcon;
+        }
 
-        //public void RemoveMonster(Monster monster)
-        //{
-        //    //code to remove a monster after it has been killed
-        //    //! add code to remove monster from list - currently being done at MovePlayer() --> Combat, return true then remove from list
+        public void RemoveMonster(Monster monster)
+        {
+            //code to remove a monster after it has been killed
+            //! add code to remove monster from list - currently being done at MovePlayer() --> Combat, return true then remove from list
 
-        //    Tile CurrentTile = (Tile)GameMap[monster.X, monster.Y];
+            Tile CurrentTile = (Tile)GameMap[monster.X, monster.Y];
 
-        //    CurrentTile.IsWalkable = true;
-        //    CurrentTile.IsMonster = false;
+            CurrentTile.IsWalkable = true;
+            CurrentTile.IsMonster = false;
 
-        //    CurrentTile.Icon = FloorIcon;
-        //    //Display();
-        //}
+            CurrentTile.Icon = FloorIcon;
+            //Display();
+        }
 
         //public void CurrentTileIsItem(Tile CurrentTile, Tile NextTile, List<Item> activeItems, Player player, string _direction)
         //{
@@ -1163,10 +1164,10 @@ namespace GreenBottle
         //    NextTile.IsWalkable = false;
         //}
 
-        //public void ProcessItemTile(Player player)
-        //{
-        //    Tile CurrentTile = GameMap[player.X, player.Y];
-        //    CurrentTile.IsItem = false;
-        //}
+        public void ProcessItemTile(Player player)
+        {
+            Tile CurrentTile = GameMap[player.X, player.Y];
+            CurrentTile.IsItem = false;
+        }
     }
 }

@@ -3,21 +3,21 @@ using Console = SadConsole.Console;
 
 namespace GreenBottle
 {
-    public class ActivityLog
+    public static class ActivityLog
     {
-        private readonly List<string> Log = new List<string>();
+        private static readonly List<string> Log = new List<string>();
 
-        public void AddToLog(string _input)
+        public static void AddToLog(string _input)
         {
             Log.Add(_input);
         }
 
-        public void ClearLog()
+        public static void ClearLog()
         {
             Log.Clear();
         }
 
-        public void Display(Console _console)
+        public static void Display(Console _console)
         {
             int _row = 0;
 
