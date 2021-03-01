@@ -130,7 +130,7 @@ namespace GreenBottle
 
 
             //START monster coode
-            List<Monster> activeMonsters = new List<Monster>();
+            activeMonsters.Clear(); //reset code for f5
 
             //generate 5 monsters
             for (int i = 0; i < 5; i++)
@@ -150,6 +150,9 @@ namespace GreenBottle
 
 
             //START item code
+            activeItems.Clear(); //reset code for f5
+
+
             for (int i = 0; i < 3; i++)
             {
                 activeItems.Add(Generate.Potion());
