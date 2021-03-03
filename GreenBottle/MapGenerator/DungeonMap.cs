@@ -3,33 +3,24 @@ using Microsoft.Xna.Framework;
 using System;
 using Console = SadConsole.Console;
 using GreenBottle.Items;
+using System.Collections.Generic;
+using GreenBottle.Generator;
 
 namespace GreenBottle
 {
     public class DungeonMap
     {
-        /*
-        private readonly string WallxIcon = "═";
-        private readonly string WallyIcon = "║";
-        private readonly string FloorIcon = ".";
-        private readonly string DoorIcon = "+";
-
-        public string NWcornerIcon = "╔";
-        public string NEcornerIcon = "╗";
-        public string SWcornerIcon = "╚";
-        public string SEcornerIcon = "╝";
-       */
         // string word = Char.ToString((char)i);
 
-        private readonly string WallxIcon = Char.ToString((char)205);
-        private readonly string WallyIcon = Char.ToString((char)186);
-        private readonly string FloorIcon = Char.ToString((char)250);
-        private readonly string DoorIcon = Char.ToString((char)43);
+        private readonly string WallxIcon = Char.ToString((char)205); // ═
+        private readonly string WallyIcon = Char.ToString((char)186); // ║
+        private readonly string FloorIcon = Char.ToString((char)250); // ·
+        private readonly string DoorIcon = Char.ToString((char)43); // +
 
-        public string NWcornerIcon = Char.ToString((char)201);
-        public string NEcornerIcon = Char.ToString((char)187);
-        public string SWcornerIcon = Char.ToString((char)200);
-        public string SEcornerIcon = Char.ToString((char)188);
+        public string NWcornerIcon = Char.ToString((char)201); // ╔
+        public string NEcornerIcon = Char.ToString((char)187); // ╗
+        public string SWcornerIcon = Char.ToString((char)200); // ╚
+        public string SEcornerIcon = Char.ToString((char)188); // ╝
 
         /*
         private readonly string WallxIcon = "#";
@@ -54,6 +45,8 @@ namespace GreenBottle
 
         public int NumberOfRooms = 0;
         public int NumberOfHallways = 0;
+
+        private Random random = new Random();
 
         public void Initialize()
         {
@@ -104,11 +97,9 @@ namespace GreenBottle
 
         public void Create()
         {
-            Random random = new Random();
+            // 3x3 room structure
 
-            //! 3x3 room structure - may enlarge in the future
-
-            // row 0
+            // row 0, column 0 or x0, y0
             int buildRoom = random.Next(1, 3);
             if (buildRoom == 1)
             {
@@ -122,6 +113,7 @@ namespace GreenBottle
                 CreateRoom(RoomPOSX, RoomPOSY, RoomHeight, RoomWidth);
             }
 
+            // row 0, col 1 or x0, y1
             buildRoom = random.Next(1, 3);
             if (buildRoom == 1)
             {
@@ -135,6 +127,7 @@ namespace GreenBottle
                 CreateRoom(RoomPOSX, RoomPOSY, RoomHeight, RoomWidth);
             }
 
+            // row 0, col 2 or x0, y2
             buildRoom = random.Next(1, 3);
             if (buildRoom == 1)
             {
@@ -148,7 +141,7 @@ namespace GreenBottle
                 CreateRoom(RoomPOSX, RoomPOSY, RoomHeight, RoomWidth);
             }
 
-            // row 1
+            // row 1, col 0 or x1, y0
             buildRoom = random.Next(1, 3);
             if (buildRoom == 1)
             {
@@ -162,6 +155,7 @@ namespace GreenBottle
                 CreateRoom(RoomPOSX, RoomPOSY, RoomHeight, RoomWidth);
             }
 
+            // row 1, col 1 or x1, y1
             buildRoom = random.Next(1, 3);
             if (buildRoom == 1)
             {
@@ -175,6 +169,7 @@ namespace GreenBottle
                 CreateRoom(RoomPOSX, RoomPOSY, RoomHeight, RoomWidth);
             }
 
+            // row 1, col 2 or x1, y2
             buildRoom = random.Next(1, 3);
             if (buildRoom == 1)
             {
@@ -188,7 +183,7 @@ namespace GreenBottle
                 CreateRoom(RoomPOSX, RoomPOSY, RoomHeight, RoomWidth);
             }
 
-            // row 2
+            // row 2, col 0 or x2, y0
             buildRoom = random.Next(1, 3);
             if (buildRoom == 1)
             {
@@ -202,6 +197,7 @@ namespace GreenBottle
                 CreateRoom(RoomPOSX, RoomPOSY, RoomHeight, RoomWidth);
             }
 
+            // row 2, col 1 or x2, y 1
             buildRoom = random.Next(1, 3);
             if (buildRoom == 1)
             {
@@ -215,6 +211,7 @@ namespace GreenBottle
                 CreateRoom(RoomPOSX, RoomPOSY, RoomHeight, RoomWidth);
             }
 
+            // row 2, col 2 or x2, y2
             buildRoom = random.Next(1, 3);
             if (buildRoom == 1)
             {
@@ -227,12 +224,6 @@ namespace GreenBottle
                 rooms[2, 2] = new Room(9, RoomPOSX, RoomPOSY, RoomHeight, RoomWidth);
                 CreateRoom(RoomPOSX, RoomPOSY, RoomHeight, RoomWidth);
             }
-
-            //if (NumberOfRooms < 4 && NumberOfHallways < 3)
-            //{
-            //    Reset();
-            //    Program.Main();
-            //}
         }
 
         public bool CheckLoneRooms()
@@ -793,18 +784,6 @@ namespace GreenBottle
             }
         }
 
-        public void Display(Console console)
-        {
-            for (int x = 0; x <= MapSizeX - 1; x++)
-            {
-                for (int y = 0; y <= MapSizeY - 1; y++)
-                {
-                    Tile CurrentTile = (Tile)GameMap[x, y];
-                    console.Print(x, y, CurrentTile.Icon);
-                }
-            }
-        }
-
         public bool IsWalkable(int x, int y)
         {
             //Tile tile = GameMap[x, y];
@@ -819,6 +798,19 @@ namespace GreenBottle
             //return tile.IsHallway;
 
             return GameMap[x, y].IsHallway;
+        }
+
+        public void Display(Console console)
+        {
+            for (int x = 0; x <= MapSizeX - 1; x++)
+            {
+                for (int y = 0; y <= MapSizeY - 1; y++)
+                {
+                    //Tile CurrentTile = (Tile)GameMap[x, y];
+                    //console.Print(x, y, CurrentTile.Icon);
+                    console.Print(x, y, GameMap[x, y].Icon);
+                }
+            }
         }
 
         //public void Display()
@@ -997,172 +989,172 @@ namespace GreenBottle
             //Display();
         }
 
-        //public void CurrentTileIsItem(Tile CurrentTile, Tile NextTile, List<Item> activeItems, Player player, string _direction)
-        //{
-        //    for (int i = 0; i < activeItems.Count; i++)
-        //    {
-        //        if (activeItems[i].X == CurrentTile.X && activeItems[i].Y == CurrentTile.Y)
-        //        {
-        //            CurrentTile.Icon = activeItems[i].Icon;
-        //            CurrentTile.IsWalkable = true;
-        //            NextTile.Icon = PlayerIcon;
-        //            NextTile.IsWalkable = false;
-        //            player.X = NextTile.X;
-        //            player.Y = NextTile.Y;
-        //            //StatBar.Display(player);
-        //            //ActivityLog.AddToLog("You move " + _direction + ".");
-        //        }
-        //    }
-        //}
+        public void CurrentTileIsItem(Tile CurrentTile, Tile NextTile, List<Item> activeItems, Player player, string _direction)
+        {
+            for (int i = 0; i < activeItems.Count; i++)
+            {
+                if (activeItems[i].X == CurrentTile.X && activeItems[i].Y == CurrentTile.Y)
+                {
+                    CurrentTile.Icon = activeItems[i].Icon;
+                    CurrentTile.IsWalkable = true;
+                    NextTile.Icon = PlayerIcon;
+                    NextTile.IsWalkable = false;
+                    player.X = NextTile.X;
+                    player.Y = NextTile.Y;
+                    //StatBar.Display(player);
+                    //ActivityLog.AddToLog("You move " + _direction + ".");
+                }
+            }
+        }
 
-        //public void NextTileIsWalkable(Tile CurrentTile, Tile NextTile, Player player, string _direction)
-        //{
-        //    CurrentTile.Icon = FloorIcon;
-        //    CurrentTile.IsWalkable = true;
-        //    NextTile.Icon = PlayerIcon;
-        //    NextTile.IsWalkable = false;
-        //    player.X = NextTile.X;
-        //    player.Y = NextTile.Y;
-        //    //StatBar.Display(player);
-        //    // ActivityLog.AddToLog("You move " + _direction + ".");
-        //}
+        public void NextTileIsWalkable(Tile CurrentTile, Tile NextTile, Player player, string _direction)
+        {
+            CurrentTile.Icon = FloorIcon;
+            CurrentTile.IsWalkable = true;
+            NextTile.Icon = PlayerIcon;
+            NextTile.IsWalkable = false;
+            player.X = NextTile.X;
+            player.Y = NextTile.Y;
+            //StatBar.Display(player);
+            // ActivityLog.AddToLog("You move " + _direction + ".");
+        }
 
-        //public void HandleMovement(Tile CurrentTile, Tile NextTile, List<Item> activeItems, Player player, DungeonMap map, List<Monster> activeMonsters, string _direction)
-        //{
-        //    if (NextTile.IsWalkable && CurrentTile.IsItem)
-        //    {
-        //        CurrentTileIsItem(CurrentTile, NextTile, activeItems, player, _direction);
-        //    }
-        //    else if (NextTile.IsWalkable)
-        //    {
-        //        NextTileIsWalkable(CurrentTile, NextTile, player, _direction);
-        //    }
-        //    else if (NextTile.IsMonster)
-        //    {
-        //        NextTileIsMonster(NextTile, player, map, activeMonsters, activeItems);
-        //    }
-        //}
+        public void HandleMovement(Tile CurrentTile, Tile NextTile, List<Item> activeItems, Player player, DungeonMap map, List<Monster> activeMonsters, string _direction)
+        {
+            if (NextTile.IsWalkable && CurrentTile.IsItem)
+            {
+                CurrentTileIsItem(CurrentTile, NextTile, activeItems, player, _direction);
+            }
+            else if (NextTile.IsWalkable)
+            {
+                NextTileIsWalkable(CurrentTile, NextTile, player, _direction);
+            }
+            else if (NextTile.IsMonster)
+            {
+                NextTileIsMonster(NextTile, player, map, activeMonsters, activeItems);
+            }
+        }
 
-        //public bool MovePlayer(string _direction, Player player, DungeonMap map, List<Monster> activeMonsters, List<Item> activeItems)
-        //{
-        //    //! door is being over written
+        public bool MovePlayer(string _direction, Player player, DungeonMap map, List<Monster> activeMonsters, List<Item> activeItems)
+        {
+            //! door is being over written
 
-        //    Tile CurrentTile = GameMap[player.X, player.Y];
-        //    Tile NextTile;
+            Tile CurrentTile = GameMap[player.X, player.Y];
+            Tile NextTile;
 
-        //    switch (_direction)
-        //    {
-        //        case "North":
-        //            NextTile = GameMap[player.X, player.Y - 1];
-        //            HandleMovement(CurrentTile, NextTile, activeItems, player, map, activeMonsters, _direction);
-        //            return true;
+            switch (_direction)
+            {
+                case "North":
+                    NextTile = GameMap[player.X, player.Y - 1];
+                    HandleMovement(CurrentTile, NextTile, activeItems, player, map, activeMonsters, _direction);
+                    return true;
 
-        //        case "South":
-        //            NextTile = GameMap[player.X, player.Y + 1];
-        //            HandleMovement(CurrentTile, NextTile, activeItems, player, map, activeMonsters, _direction);
-        //            return true;
+                case "South":
+                    NextTile = GameMap[player.X, player.Y + 1];
+                    HandleMovement(CurrentTile, NextTile, activeItems, player, map, activeMonsters, _direction);
+                    return true;
 
-        //        case "West":
-        //            NextTile = GameMap[player.X - 1, player.Y];
-        //            HandleMovement(CurrentTile, NextTile, activeItems, player, map, activeMonsters, _direction);
-        //            return true;
+                case "West":
+                    NextTile = GameMap[player.X - 1, player.Y];
+                    HandleMovement(CurrentTile, NextTile, activeItems, player, map, activeMonsters, _direction);
+                    return true;
 
-        //        case "East":
-        //            NextTile = GameMap[player.X + 1, player.Y];
-        //            HandleMovement(CurrentTile, NextTile, activeItems, player, map, activeMonsters, _direction);
-        //            return true;
+                case "East":
+                    NextTile = GameMap[player.X + 1, player.Y];
+                    HandleMovement(CurrentTile, NextTile, activeItems, player, map, activeMonsters, _direction);
+                    return true;
 
-        //        case "NorthWest":
-        //            NextTile = GameMap[player.X - 1, player.Y - 1];
-        //            HandleMovement(CurrentTile, NextTile, activeItems, player, map, activeMonsters, _direction);
-        //            return true;
+                case "NorthWest":
+                    NextTile = GameMap[player.X - 1, player.Y - 1];
+                    HandleMovement(CurrentTile, NextTile, activeItems, player, map, activeMonsters, _direction);
+                    return true;
 
-        //        case "NorthEast":
-        //            NextTile = GameMap[player.X + 1, player.Y - 1];
-        //            HandleMovement(CurrentTile, NextTile, activeItems, player, map, activeMonsters, _direction);
-        //            return true;
+                case "NorthEast":
+                    NextTile = GameMap[player.X + 1, player.Y - 1];
+                    HandleMovement(CurrentTile, NextTile, activeItems, player, map, activeMonsters, _direction);
+                    return true;
 
-        //        case "SouthWest":
-        //            NextTile = GameMap[player.X - 1, player.Y + 1];
-        //            HandleMovement(CurrentTile, NextTile, activeItems, player, map, activeMonsters, _direction);
-        //            return true;
+                case "SouthWest":
+                    NextTile = GameMap[player.X - 1, player.Y + 1];
+                    HandleMovement(CurrentTile, NextTile, activeItems, player, map, activeMonsters, _direction);
+                    return true;
 
-        //        case "SouthEast":
-        //            NextTile = GameMap[player.X + 1, player.Y + 1];
-        //            HandleMovement(CurrentTile, NextTile, activeItems, player, map, activeMonsters, _direction);
-        //            return true;
-        //    }
-        //    //ActivityLog.AddToLog("You can't move that way.");
-        //    return false;
-        //}
+                case "SouthEast":
+                    NextTile = GameMap[player.X + 1, player.Y + 1];
+                    HandleMovement(CurrentTile, NextTile, activeItems, player, map, activeMonsters, _direction);
+                    return true;
+            }
+            //ActivityLog.AddToLog("You can't move that way.");
+            return false;
+        }
 
-        //private void NextTileIsMonster(Tile NextTile, Player player, DungeonMap map, List<Monster> activeMonsters, List<Item> activeItems)
-        //{
-        //    for (int i = 0; i < activeMonsters.Count; i++)
-        //    {
-        //        if (activeMonsters[i].Y == NextTile.Y && activeMonsters[i].X == NextTile.X)
-        //        {
-        //            if (Combat.PlayerAttacks(player, activeMonsters[i], map)) //if return true
-        //            {
-        //                activeMonsters.RemoveAt(i);
+        private void NextTileIsMonster(Tile NextTile, Player player, DungeonMap map, List<Monster> activeMonsters, List<Item> activeItems)
+        {
+            for (int i = 0; i < activeMonsters.Count; i++)
+            {
+                if (activeMonsters[i].Y == NextTile.Y && activeMonsters[i].X == NextTile.X)
+                {
+                    if (Combat.PlayerAttacks(player, activeMonsters[i], map)) //if return true
+                    {
+                        activeMonsters.RemoveAt(i);
 
-        //                //! Loot Code - move to its own thing
-        //                activeItems.Add(Generate.Potion());
+                        //! Loot Code - move to its own thing
+                        activeItems.Add(Generate.Potion());
 
-        //                activeItems[activeItems.Count - 1].X = NextTile.X;
-        //                activeItems[activeItems.Count - 1].Y = NextTile.Y;
+                        activeItems[activeItems.Count - 1].X = NextTile.X;
+                        activeItems[activeItems.Count - 1].Y = NextTile.Y;
 
-        //                NextTile.Icon = "*"; //test icon
-        //            }
-        //        }
-        //    }
-        //}
+                        NextTile.Icon = "*"; //test icon
+                    }
+                }
+            }
+        }
 
-        //public void MoveMonster(DungeonMap map, List<Monster> activeMonsters)
-        //{
-        //    //? rename RandomMoveMonster()
-        //    //? recreate MoveMonster(current-pos, next-pos)
+        public void MoveMonster(DungeonMap map, List<Monster> activeMonsters)
+        {
+            //? rename RandomMoveMonster()
+            //? recreate MoveMonster(current-pos, next-pos)
 
-        //    Random random = new Random();
+            Random random = new Random();
 
-        //    int _randX;
-        //    int _randY;
+            int _randX;
+            int _randY;
 
-        //    foreach (Monster monster in activeMonsters)
-        //    {
-        //        //? make random chance if monster moves or leave at random 0,0
+            foreach (Monster monster in activeMonsters)
+            {
+                //? make random chance if monster moves or leave at random 0,0
 
-        //        //! monsters erase icon when they walk over a item
-        //        //? fix or remove item from activeList as if the monster took the item
+                //! monsters erase icon when they walk over a item
+                //? fix or remove item from activeList as if the monster took the item
 
-        //        Tile CurrentTile = GameMap[monster.X, monster.Y];
+                Tile CurrentTile = GameMap[monster.X, monster.Y];
 
-        //        _randX = random.Next(-1, 2);
-        //        _randY = random.Next(-1, 2);
+                _randX = random.Next(-1, 2);
+                _randY = random.Next(-1, 2);
 
-        //        Tile NextTile = (Tile)GameMap[monster.X + _randX, monster.Y + _randY];
+                Tile NextTile = (Tile)GameMap[monster.X + _randX, monster.Y + _randY];
 
-        //        if (NextTile.IsWalkable)
-        //        {
-        //            ProcessMonsterTile(CurrentTile, NextTile, monster);
+                if (NextTile.IsWalkable)
+                {
+                    ProcessMonsterTile(CurrentTile, NextTile, monster);
 
-        //            monster.X += _randX;
-        //            monster.Y += _randY;
-        //        }
-        //    }
-        //}
+                    monster.X += _randX;
+                    monster.Y += _randY;
+                }
+            }
+        }
 
-        //// change tile stats when a monster moves, MoveMonster()
-        ////? recreate to ProcessTile - use for all tile changes - Player, Monsters, Items
-        //private void ProcessMonsterTile(Tile CurrentTile, Tile NextTile, Monster monster)
-        //{
-        //    CurrentTile.Icon = FloorIcon;
-        //    CurrentTile.IsMonster = false;
-        //    CurrentTile.IsWalkable = true;
-        //    NextTile.Icon = monster.Icon;
-        //    NextTile.IsMonster = true;
-        //    NextTile.IsWalkable = false;
-        //}
+        // change tile stats when a monster moves, MoveMonster()
+        //? recreate to ProcessTile - use for all tile changes - Player, Monsters, Items
+        private void ProcessMonsterTile(Tile CurrentTile, Tile NextTile, Monster monster)
+        {
+            CurrentTile.Icon = FloorIcon;
+            CurrentTile.IsMonster = false;
+            CurrentTile.IsWalkable = true;
+            NextTile.Icon = monster.Icon;
+            NextTile.IsMonster = true;
+            NextTile.IsWalkable = false;
+        }
 
         public void ProcessItemTile(Player player)
         {

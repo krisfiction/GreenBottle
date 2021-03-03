@@ -43,37 +43,37 @@ namespace GreenBottle
 
         // public Point MyPoisition = new Point(4, 5); // testing
 
-        private Point _playerPosition;
-        private Cell _playerPositionMapGlyph;
+        //private Point _playerPosition;
+        //private Cell _playerPositionMapGlyph;
 
         private readonly Random random = new Random();
         
         private static List<Monster> activeMonsters = new List<Monster>();
         private static List<Item> activeItems = new List<Item>();
 
-        public Point PlayerPosition //? redo this or get rid of it
-        {
-            get => _playerPosition;
-            private set
-            {
-                // set boundry for player
-                if (value.X < 0 || value.X >= MapConsole.Width || value.Y < 0 || value.Y >= MapConsole.Height)
-                {
-                    return;
-                }
+        //public Point PlayerPosition //? redo this or get rid of it
+        //{
+        //    get => _playerPosition;
+        //    private set
+        //    {
+        //        // set boundry for player
+        //        if (value.X < 0 || value.X >= MapConsole.Width || value.Y < 0 || value.Y >= MapConsole.Height)
+        //        {
+        //            return;
+        //        }
 
-                // Restore map cell
-                _playerPositionMapGlyph.CopyAppearanceTo(MapConsole[_playerPosition.X, _playerPosition.Y]);
-                // Move player
-                _playerPosition = value;
-                // Save map cell
-                _playerPositionMapGlyph.CopyAppearanceFrom(MapConsole[_playerPosition.X, _playerPosition.Y]);
-                // Draw player
-                PlayerGlyph.CopyAppearanceTo(MapConsole[_playerPosition.X, _playerPosition.Y]);
-                // Redraw the map
-                MapConsole.IsDirty = true;
-            }
-        }
+        //        // Restore map cell
+        //        _playerPositionMapGlyph.CopyAppearanceTo(MapConsole[_playerPosition.X, _playerPosition.Y]);
+        //        // Move player
+        //        _playerPosition = value;
+        //        // Save map cell
+        //        _playerPositionMapGlyph.CopyAppearanceFrom(MapConsole[_playerPosition.X, _playerPosition.Y]);
+        //        // Draw player
+        //        PlayerGlyph.CopyAppearanceTo(MapConsole[_playerPosition.X, _playerPosition.Y]);
+        //        // Redraw the map
+        //        MapConsole.IsDirty = true;
+        //    }
+        //}
 
         public GameScreen()
         {
@@ -174,6 +174,8 @@ namespace GreenBottle
             //END inventory code
 
             UpdateDisplay();
+            
+
 
             CreatePlayer();
 
@@ -187,22 +189,27 @@ namespace GreenBottle
 
         public void CreatePlayer()
         {
-            // Setup player
-            PlayerGlyph = new Cell(Color.Red, Color.Black, 64); // 64 = @
+            //// Setup player
+            //PlayerGlyph = new Cell(Color.Red, Color.Black, 64); // 64 = @
 
-            //_playerPosition = new Point(random.Next(1, mapConsoleWidth), random.Next(1, mapConsoleHeight));
-            _playerPosition = RandomPosition();
+            ////_playerPosition = new Point(random.Next(1, mapConsoleWidth), random.Next(1, mapConsoleHeight));
+            //_playerPosition = RandomPosition();
 
-            _playerPositionMapGlyph = new Cell();
-            _playerPositionMapGlyph.CopyAppearanceFrom(MapConsole[_playerPosition.X, _playerPosition.Y]);
-            PlayerGlyph.CopyAppearanceTo(MapConsole[_playerPosition.X, _playerPosition.Y]);
+            //_playerPositionMapGlyph = new Cell();
+            //_playerPositionMapGlyph.CopyAppearanceFrom(MapConsole[_playerPosition.X, _playerPosition.Y]);
+            //PlayerGlyph.CopyAppearanceTo(MapConsole[_playerPosition.X, _playerPosition.Y]);
 
 
             Player.Name = "Tunk";
-            Player.HPMax = 100;
-            Player.HP = 100;
-            Player.X = _playerPosition.X;
-            Player.Y = _playerPosition.Y;
+            Player.HealthMax = 100; 
+            Player.Health = 100;
+            Player.Icon = "@";
+            //Player.X = _playerPosition.X;
+            //Player.Y = _playerPosition.Y;
+
+            DungeonMap.PlacePlayer(Player);
+
+            UpdateDisplay();
             
 
         }
@@ -233,7 +240,11 @@ namespace GreenBottle
 
         public override bool ProcessKeyboard(Keyboard info)
         {
-            Point newPlayerPosition = PlayerPosition;
+            //Point newPlayerPosition = PlayerPosition;
+
+            bool _moveKeyPressed = false;
+            string _moveKeyDirection = null;
+
 
             if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.F5))
             {
@@ -244,12 +255,13 @@ namespace GreenBottle
 
 
                 StartGame();
-                newPlayerPosition = RandomPosition(); // seems to be woring but leave old map glyph in place of previous spot
+                //newPlayerPosition = RandomPosition(); // seems to be woring but leave old map glyph in place of previous spot
+                //DungeonMap.PlacePlayer(Player);
             }
 
             if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.F6))
             {
-                newPlayerPosition = RandomPosition();
+                //newPlayerPosition = RandomPosition();
             }
 
             // movement keys
@@ -257,82 +269,128 @@ namespace GreenBottle
             //? create ActiveMap variable and send DungeonMap and CaveMap to it
             if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Up) || info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.NumPad8))
             {
-                if (DungeonMap.IsWalkable(newPlayerPosition.X, newPlayerPosition.Y - 1))
-                {
-                    newPlayerPosition += SadConsole.Directions.North;
+                //if (DungeonMap.IsWalkable(newPlayerPosition.X, newPlayerPosition.Y - 1))
+                //{
+                    //newPlayerPosition += SadConsole.Directions.North;
+                    _moveKeyPressed = true;
+                    _moveKeyDirection = "North";
                     ActivityLog.AddToLog("You move North.");
-                }
+                // }
+                //UpdateDisplay();
+                //MapConsole.IsDirty = true;
             }
 
             if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Down) || info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.NumPad2))
             {
-                if (DungeonMap.IsWalkable(newPlayerPosition.X, newPlayerPosition.Y + 1))
-                {
-                    newPlayerPosition += SadConsole.Directions.South;
-                    ActivityLog.AddToLog("You move South.");
-                }
+                // if (DungeonMap.IsWalkable(newPlayerPosition.X, newPlayerPosition.Y + 1))
+                //{
+                //newPlayerPosition += SadConsole.Directions.South;
+                _moveKeyPressed = true;
+                _moveKeyDirection = "South";
+                ActivityLog.AddToLog("You move South.");
+                //}
             }
 
             if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Left) || info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.NumPad4))
             {
-                if (DungeonMap.IsWalkable(newPlayerPosition.X - 1, newPlayerPosition.Y))
-                {
-                    newPlayerPosition += SadConsole.Directions.West;
-                    ActivityLog.AddToLog("You move West.");
-                }
+                //if (DungeonMap.IsWalkable(newPlayerPosition.X - 1, newPlayerPosition.Y))
+                //{
+                //    newPlayerPosition += SadConsole.Directions.West;
+                _moveKeyPressed = true;
+                _moveKeyDirection = "West";
+                  ActivityLog.AddToLog("You move West.");
+                //}
             }
 
             if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Right) || info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.NumPad6))
             {
-                if (DungeonMap.IsWalkable(newPlayerPosition.X + 1, newPlayerPosition.Y))
-                {
-                    newPlayerPosition += SadConsole.Directions.East;
+                //if (DungeonMap.IsWalkable(newPlayerPosition.X + 1, newPlayerPosition.Y))
+                //{
+                //    newPlayerPosition += SadConsole.Directions.East;
+                _moveKeyPressed = true;
+                _moveKeyDirection = "East";
                     ActivityLog.AddToLog("You move East.");
-                }
+                //}
             }
 
             if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.NumPad7))
             {
-                if (DungeonMap.IsWalkable(newPlayerPosition.X - 1, newPlayerPosition.Y - 1))
-                {
-                    newPlayerPosition += SadConsole.Directions.NorthWest;
+                //if (DungeonMap.IsWalkable(newPlayerPosition.X - 1, newPlayerPosition.Y - 1))
+                //{
+                //    newPlayerPosition += SadConsole.Directions.NorthWest;
+                _moveKeyPressed = true;
+                _moveKeyDirection = "NorthWest";
                     ActivityLog.AddToLog("You move NorthWest.");
-                }
+                //}
             }
 
             if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.NumPad9))
             {
-                if (DungeonMap.IsWalkable(newPlayerPosition.X + 1, newPlayerPosition.Y - 1))
-                {
-                    newPlayerPosition += SadConsole.Directions.NorthEast;
-                    ActivityLog.AddToLog("You move NorthEast.");
-                }
+                //if (DungeonMap.IsWalkable(newPlayerPosition.X + 1, newPlayerPosition.Y - 1))
+                //{
+                //    newPlayerPosition += SadConsole.Directions.NorthEast;
+                _moveKeyPressed = true;
+                _moveKeyDirection = "NorthEast";
+                   ActivityLog.AddToLog("You move NorthEast.");
+                //}
             }
 
             if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.NumPad1))
             {
-                if (DungeonMap.IsWalkable(newPlayerPosition.X - 1, newPlayerPosition.Y + 1))
-                {
-                    newPlayerPosition += SadConsole.Directions.SouthWest;
+                //if (DungeonMap.IsWalkable(newPlayerPosition.X - 1, newPlayerPosition.Y + 1))
+                //{
+                //    newPlayerPosition += SadConsole.Directions.SouthWest;
+                _moveKeyPressed = true;
+                _moveKeyDirection = "SouthWest";
                     ActivityLog.AddToLog("You move SouthWest.");
-                }
+                //}
             }
 
             if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.NumPad3))
             {
-                if (DungeonMap.IsWalkable(newPlayerPosition.X + 1, newPlayerPosition.Y + 1))
-                {
-                    newPlayerPosition += SadConsole.Directions.SouthEast;
+                //if (DungeonMap.IsWalkable(newPlayerPosition.X + 1, newPlayerPosition.Y + 1))
+                //{
+                //    newPlayerPosition += SadConsole.Directions.SouthEast;
+                _moveKeyPressed = true;
+                _moveKeyDirection = "SouthEast";
                     ActivityLog.AddToLog("You move SouthEast.");
-                }
+                //}
+            }
+            if (_moveKeyPressed) //if a moved key is pressed do this
+            {
+                DungeonMap.MovePlayer(_moveKeyDirection, Player, DungeonMap, activeMonsters, activeItems);
+                DungeonMap.MoveMonster(DungeonMap, activeMonsters);
             }
 
 
-            if(info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.G))
+            if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.OemTilde))
+            {
+                ActivityLog.AddToLog("Cheater!");
+            }
+
+            //TODO create inventory screen 
+            if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.I))
+            {
+                ActivityLog.AddToLog("Inventory");
+            }
+            if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Q))
+            {
+                ActivityLog.AddToLog("Quaff Potion");
+            }
+            if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.R))
+            {
+                ActivityLog.AddToLog("Read Scroll");
+            }
+
+
+
+
+
+            if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.G))
             {
                 for (int i = 0; i < activeItems.Count; i++)
                 {
-                    if (activeItems[i].X == _playerPosition.X && activeItems[i].Y == _playerPosition.Y)
+                    if (activeItems[i].X == Player.X && activeItems[i].Y == Player.Y)
                     {
                         ActivityLog.AddToLog("you pick up " + activeItems[i].Name);
 
@@ -348,6 +406,8 @@ namespace GreenBottle
                         activeItems.RemoveAt(i); // remove item from active list
 
                         DungeonMap.ProcessItemTile(Player); //set tile.IsItem to false
+
+                        ActivityLog.AddToLog("pick up loot");
                     }
                 }
             }
@@ -357,18 +417,18 @@ namespace GreenBottle
 
             //DungeonMap.LightRadius(MapConsole, _playerPosition.X, _playerPosition.Y); //testing
 
-            if (newPlayerPosition != PlayerPosition)
-            {
-                PlayerPosition = newPlayerPosition;
+            //if (newPlayerPosition != PlayerPosition)
+            //{
+            //    PlayerPosition = newPlayerPosition;
 
-                Player.X = newPlayerPosition.X;
-                Player.Y = newPlayerPosition.Y;
+            //    Player.X = newPlayerPosition.X;
+            //    Player.Y = newPlayerPosition.Y;
                 
-                return true;
-            }
+            //    return true;
+            //}
 
-            //UpdateDisplay();
-            ActivityLog.Display(ActivityLogConsole);
+            UpdateDisplay();
+            //ActivityLog.Display(ActivityLogConsole);
 
             return false;
         }
@@ -378,6 +438,11 @@ namespace GreenBottle
             DungeonMap.Display(MapConsole);
             ActivityLog.Display(ActivityLogConsole);
             Stats.Display(StatsConsole);
+
+            //? is this needed
+            MapConsole.IsDirty = true;
+            ActivityLogConsole.IsDirty = true;
+            StatsConsole.IsDirty = true;
         }
     }
 }
