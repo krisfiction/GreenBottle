@@ -1,15 +1,14 @@
-﻿using Microsoft.Xna.Framework;
-using SadConsole;
-using SadConsole.Input;
-using System;
-using Console = SadConsole.Console;
-using GreenBottle.Characters;
-using GreenBottle.Characters.Monsters;
-using System.Collections.Generic;
+﻿using GreenBottle.Characters;
 using GreenBottle.Generator;
 using GreenBottle.Items;
 using GreenBottle.Items.Potions;
 using GreenBottle.Items.Scrolls;
+using Microsoft.Xna.Framework;
+using SadConsole;
+using SadConsole.Input;
+using System;
+using System.Collections.Generic;
+using Console = SadConsole.Console;
 
 namespace GreenBottle
 {
@@ -29,15 +28,23 @@ namespace GreenBottle
 
         public Console StatsConsole { get; }
         public const int StatsConsoleWidth = 30;
-        public const int StatsConsoleHeight = 35;
+        public const int StatsConsoleHeight = 20;
         public const int StatsConsolePOSx = 110;
         public const int StatsConsolePOSy = 0;
 
+        public Console InventoryConsole { get; }
+        public const int InventoryConsoleWidth = 30;
+        public const int InventoryConsoleHeight = 25; //needs updated
+        public const int InventoryConsolePOSx = 110; // needs updated
+        public const int InventoryConsolePOSy = 21; // needs updated
+
         public DungeonMap DungeonMap;
+
         //public ActivityLog ActivityLog;
         public Stats Stats;
 
         public Player Player;
+        public Inventory Inventory;
 
         public Cell PlayerGlyph { get; set; }
 
@@ -47,7 +54,7 @@ namespace GreenBottle
         //private Cell _playerPositionMapGlyph;
 
         private readonly Random random = new Random();
-        
+
         private static List<Monster> activeMonsters = new List<Monster>();
         private static List<Item> activeItems = new List<Item>();
 
@@ -81,6 +88,7 @@ namespace GreenBottle
             //ActivityLog = new ActivityLog(); //made static
             Stats = new Stats(); //? make static as well
             Player = new Player();
+            Inventory = new Inventory();
 
             // Setup map
             MapConsole = new Console(mapConsoleWidth, mapConsoleHeight) //size of window
@@ -107,8 +115,14 @@ namespace GreenBottle
                 Parent = this
             };
 
-            StartGame();
+            InventoryConsole = new Console(InventoryConsoleWidth, InventoryConsoleHeight)
+            {
+                Position = new Point(InventoryConsolePOSx, InventoryConsolePOSy),
+                DefaultBackground = Color.Black,
+                Parent = this
+            };
 
+            StartGame();
         }
 
         public void StartGame()
@@ -126,8 +140,6 @@ namespace GreenBottle
 
             DungeonMap.Initialize();
             //dungeonMap.CreateOneRoom();
-
-
 
             //START monster coode
             activeMonsters.Clear(); //reset code for f5
@@ -148,10 +160,8 @@ namespace GreenBottle
             }
             //END monster code
 
-
             //START item code
             activeItems.Clear(); //reset code for f5
-
 
             for (int i = 0; i < 3; i++)
             {
@@ -174,18 +184,11 @@ namespace GreenBottle
             //END inventory code
 
             UpdateDisplay();
-            
-
 
             CreatePlayer();
 
             //UpdateDisplay();
         }
-
-
-
-
-
 
         public void CreatePlayer()
         {
@@ -199,9 +202,8 @@ namespace GreenBottle
             //_playerPositionMapGlyph.CopyAppearanceFrom(MapConsole[_playerPosition.X, _playerPosition.Y]);
             //PlayerGlyph.CopyAppearanceTo(MapConsole[_playerPosition.X, _playerPosition.Y]);
 
-
             Player.Name = "Tunk";
-            Player.HealthMax = 100; 
+            Player.HealthMax = 100;
             Player.Health = 100;
             Player.Icon = "@";
             //Player.X = _playerPosition.X;
@@ -210,8 +212,6 @@ namespace GreenBottle
             DungeonMap.PlacePlayer(Player);
 
             UpdateDisplay();
-            
-
         }
 
         //check if random starting position is walkable and not a hallway
@@ -245,14 +245,12 @@ namespace GreenBottle
             bool _moveKeyPressed = false;
             string _moveKeyDirection = null;
 
-
             if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.F5))
             {
                 //DungeonMap.Initialize();
                 //DungeonMap.Display(MapConsole);
 
                 //newPlayerPosition = RandomPosition(); // seems to be woring but leave old map glyph in place of previous spot
-
 
                 StartGame();
                 //newPlayerPosition = RandomPosition(); // seems to be woring but leave old map glyph in place of previous spot
@@ -271,10 +269,10 @@ namespace GreenBottle
             {
                 //if (DungeonMap.IsWalkable(newPlayerPosition.X, newPlayerPosition.Y - 1))
                 //{
-                    //newPlayerPosition += SadConsole.Directions.North;
-                    _moveKeyPressed = true;
-                    _moveKeyDirection = "North";
-                    ActivityLog.AddToLog("You move North.");
+                //newPlayerPosition += SadConsole.Directions.North;
+                _moveKeyPressed = true;
+                _moveKeyDirection = "North";
+                ActivityLog.AddToLog("You move North.");
                 // }
                 //UpdateDisplay();
                 //MapConsole.IsDirty = true;
@@ -298,7 +296,7 @@ namespace GreenBottle
                 //    newPlayerPosition += SadConsole.Directions.West;
                 _moveKeyPressed = true;
                 _moveKeyDirection = "West";
-                  ActivityLog.AddToLog("You move West.");
+                ActivityLog.AddToLog("You move West.");
                 //}
             }
 
@@ -309,7 +307,7 @@ namespace GreenBottle
                 //    newPlayerPosition += SadConsole.Directions.East;
                 _moveKeyPressed = true;
                 _moveKeyDirection = "East";
-                    ActivityLog.AddToLog("You move East.");
+                ActivityLog.AddToLog("You move East.");
                 //}
             }
 
@@ -320,7 +318,7 @@ namespace GreenBottle
                 //    newPlayerPosition += SadConsole.Directions.NorthWest;
                 _moveKeyPressed = true;
                 _moveKeyDirection = "NorthWest";
-                    ActivityLog.AddToLog("You move NorthWest.");
+                ActivityLog.AddToLog("You move NorthWest.");
                 //}
             }
 
@@ -331,7 +329,7 @@ namespace GreenBottle
                 //    newPlayerPosition += SadConsole.Directions.NorthEast;
                 _moveKeyPressed = true;
                 _moveKeyDirection = "NorthEast";
-                   ActivityLog.AddToLog("You move NorthEast.");
+                ActivityLog.AddToLog("You move NorthEast.");
                 //}
             }
 
@@ -342,7 +340,7 @@ namespace GreenBottle
                 //    newPlayerPosition += SadConsole.Directions.SouthWest;
                 _moveKeyPressed = true;
                 _moveKeyDirection = "SouthWest";
-                    ActivityLog.AddToLog("You move SouthWest.");
+                ActivityLog.AddToLog("You move SouthWest.");
                 //}
             }
 
@@ -353,7 +351,7 @@ namespace GreenBottle
                 //    newPlayerPosition += SadConsole.Directions.SouthEast;
                 _moveKeyPressed = true;
                 _moveKeyDirection = "SouthEast";
-                    ActivityLog.AddToLog("You move SouthEast.");
+                ActivityLog.AddToLog("You move SouthEast.");
                 //}
             }
             if (_moveKeyPressed) //if a moved key is pressed do this
@@ -362,13 +360,12 @@ namespace GreenBottle
                 DungeonMap.MoveMonster(DungeonMap, activeMonsters);
             }
 
-
             if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.OemTilde))
             {
                 ActivityLog.AddToLog("Cheater!");
             }
 
-            //TODO create inventory screen 
+            //TODO create inventory screen
             if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.I))
             {
                 ActivityLog.AddToLog("Inventory");
@@ -381,10 +378,6 @@ namespace GreenBottle
             {
                 ActivityLog.AddToLog("Read Scroll");
             }
-
-
-
-
 
             if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.G))
             {
@@ -412,9 +405,6 @@ namespace GreenBottle
                 }
             }
 
-
-
-
             //DungeonMap.LightRadius(MapConsole, _playerPosition.X, _playerPosition.Y); //testing
 
             //if (newPlayerPosition != PlayerPosition)
@@ -423,7 +413,7 @@ namespace GreenBottle
 
             //    Player.X = newPlayerPosition.X;
             //    Player.Y = newPlayerPosition.Y;
-                
+
             //    return true;
             //}
 
@@ -438,6 +428,7 @@ namespace GreenBottle
             DungeonMap.Display(MapConsole);
             ActivityLog.Display(ActivityLogConsole);
             Stats.Display(StatsConsole);
+            Inventory.Display(InventoryConsole, Player, DungeonMap, "all");
 
             //? is this needed
             MapConsole.IsDirty = true;
