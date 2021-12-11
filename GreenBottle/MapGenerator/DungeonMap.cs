@@ -469,6 +469,7 @@ namespace GreenBottle
                         UcornerTile.Icon = DoorIcon;
                         UcornerTile.IsWalkable = true;
                         UcornerTile.IsHallway = true;
+                        UcornerTile.IsDoor = true;
                     }
 
                     if (y == Door2y)
@@ -477,6 +478,7 @@ namespace GreenBottle
                         UcornerTile.Icon = DoorIcon;
                         UcornerTile.IsWalkable = true;
                         UcornerTile.IsHallway = true;
+                        UcornerTile.IsDoor = true;
                     }
                 }
             }
@@ -492,6 +494,7 @@ namespace GreenBottle
                         CurrentTile.Icon = DoorIcon;
                         CurrentTile.IsWalkable = true;
                         CurrentTile.IsHallway = true;
+                        CurrentTile.IsDoor = true;
                     }
                     else
                     {
@@ -509,6 +512,7 @@ namespace GreenBottle
                         CurrentTile.Icon = DoorIcon;
                         CurrentTile.IsWalkable = true;
                         CurrentTile.IsHallway = true;
+                        CurrentTile.IsDoor = true;
                     }
                     else
                     {
@@ -611,6 +615,7 @@ namespace GreenBottle
                         UcornerTile.Icon = DoorIcon;
                         UcornerTile.IsWalkable = true;
                         UcornerTile.IsHallway = true;
+                        UcornerTile.IsDoor = true;
 
                         //    Tile UcornerTile = (Tile)GameMap[x, y - 1];
                         //    UcornerTile.Icon = SWcornerIcon;
@@ -627,6 +632,7 @@ namespace GreenBottle
                         UcornerTile.Icon = DoorIcon;
                         UcornerTile.IsWalkable = true;
                         UcornerTile.IsHallway = true;
+                        UcornerTile.IsDoor = true;
 
                         //    Tile UcornerTile = (Tile)GameMap[x, y - 1];
                         //    UcornerTile.Icon = SEcornerIcon;
@@ -661,6 +667,7 @@ namespace GreenBottle
                         CurrentTile.Icon = DoorIcon;
                         CurrentTile.IsWalkable = true;
                         CurrentTile.IsHallway = true;
+                        CurrentTile.IsDoor = true;
                     }
                     else
                     {
@@ -678,6 +685,7 @@ namespace GreenBottle
                         CurrentTile.Icon = DoorIcon;
                         CurrentTile.IsWalkable = true;
                         CurrentTile.IsHallway = true;
+                        CurrentTile.IsDoor = true;
                     }
                     else
                     {
@@ -725,34 +733,34 @@ namespace GreenBottle
                     //apply walls
                     if (y == 0 || y == RoomHeight) // "═"
                     {
-                        GameMap[RoomPOSX + x, RoomPOSY + y] = new Tile(RoomPOSX + x, RoomPOSY + y, WallxIcon, true, false, false, false, false);
+                        GameMap[RoomPOSX + x, RoomPOSY + y] = new Tile(RoomPOSX + x, RoomPOSY + y, WallxIcon, false, true, false, false, false, false);
                     }
                     else if (x == 0 || x == RoomWidth) // "║"
                     {
-                        GameMap[RoomPOSX + x, RoomPOSY + y] = new Tile(RoomPOSX + x, RoomPOSY + y, WallyIcon, true, false, false, false, false);
+                        GameMap[RoomPOSX + x, RoomPOSY + y] = new Tile(RoomPOSX + x, RoomPOSY + y, WallyIcon, false, true, false, false, false, false);
                     }
                     //apply floors
                     else // "."
                     {
-                        GameMap[RoomPOSX + x, RoomPOSY + y] = new Tile(RoomPOSX + x, RoomPOSY + y, FloorIcon, false, true, false, false, false);
+                        GameMap[RoomPOSX + x, RoomPOSY + y] = new Tile(RoomPOSX + x, RoomPOSY + y, FloorIcon, false, false, true, false, false, false);
                     }
 
                     // apply corner walls
                     if (x == 0 && y == 0)
                     {
-                        GameMap[RoomPOSX + x, RoomPOSY + y] = new Tile(RoomPOSX + x, RoomPOSY + y, NWcornerIcon, true, false, false, false, false);
+                        GameMap[RoomPOSX + x, RoomPOSY + y] = new Tile(RoomPOSX + x, RoomPOSY + y, NWcornerIcon, false, true, false, false, false, false);
                     }
                     if (y == 0 && x == RoomWidth)
                     {
-                        GameMap[RoomPOSX + x, RoomPOSY + y] = new Tile(RoomPOSX + x, RoomPOSY + y, NEcornerIcon, true, false, false, false, false);
+                        GameMap[RoomPOSX + x, RoomPOSY + y] = new Tile(RoomPOSX + x, RoomPOSY + y, NEcornerIcon, false, true, false, false, false, false);
                     }
                     if (y == RoomHeight && x == RoomWidth)
                     {
-                        GameMap[RoomPOSX + x, RoomPOSY + y] = new Tile(RoomPOSX + x, RoomPOSY + y, SEcornerIcon, true, false, false, false, false);
+                        GameMap[RoomPOSX + x, RoomPOSY + y] = new Tile(RoomPOSX + x, RoomPOSY + y, SEcornerIcon, false, true, false, false, false, false);
                     }
                     if (y == RoomHeight && x == 0)
                     {
-                        GameMap[RoomPOSX + x, RoomPOSY + y] = new Tile(RoomPOSX + x, RoomPOSY + y, SWcornerIcon, true, false, false, false, false);
+                        GameMap[RoomPOSX + x, RoomPOSY + y] = new Tile(RoomPOSX + x, RoomPOSY + y, SWcornerIcon, false, true, false, false, false, false);
                     }
                 }
             }
@@ -767,7 +775,7 @@ namespace GreenBottle
                 for (int y = 0; y <= MapSizeY - 1; y++)
                 {
                     //! fill array with blank tiles
-                    GameMap[x, y] = new Tile(x, y, " ", false, false, false, false, false);
+                    GameMap[x, y] = new Tile(x, y, " ", false, false, false, false, false, false);
                 }
             }
         }
@@ -1021,6 +1029,19 @@ namespace GreenBottle
 
         public void HandleMovement(Tile CurrentTile, Tile NextTile, List<Item> activeItems, Player player, DungeonMap map, List<Monster> activeMonsters, string _direction)
         {
+            if (NextTile.IsWalkable == false && NextTile.IsMonster == false)
+            {
+                ActivityLog.AddToLog("You can't move that way.");
+            }
+            else if (NextTile.IsMonster)
+            {
+                ActivityLog.AddToLog("You Attack!.");
+            }
+            else
+            {
+                ActivityLog.AddToLog("You move " + _direction);
+            }
+            
             if (NextTile.IsWalkable && CurrentTile.IsItem)
             {
                 CurrentTileIsItem(CurrentTile, NextTile, activeItems, player, _direction);
@@ -1033,12 +1054,11 @@ namespace GreenBottle
             {
                 NextTileIsMonster(NextTile, player, map, activeMonsters, activeItems);
             }
+
         }
 
         public bool MovePlayer(string _direction, Player player, DungeonMap map, List<Monster> activeMonsters, List<Item> activeItems)
         {
-            //! door is being over written
-
             Tile CurrentTile = GameMap[player.X, player.Y];
             Tile NextTile;
 
@@ -1088,26 +1108,24 @@ namespace GreenBottle
             return false;
         }
 
-        private void NextTileIsMonster(Tile NextTile, Player player, DungeonMap map, List<Monster> activeMonsters, List<Item> activeItems)
+        private List<Item> NextTileIsMonster(Tile NextTile, Player player, DungeonMap map, List<Monster> activeMonsters, List<Item> activeItems)
         {
             for (int i = 0; i < activeMonsters.Count; i++)
             {
                 if (activeMonsters[i].Y == NextTile.Y && activeMonsters[i].X == NextTile.X)
                 {
-                    if (Combat.PlayerAttacks(player, activeMonsters[i], map)) //if return true
+                    if (Combat.PlayerAttacks(player, activeMonsters[i], map)) //if return true = monster dead
                     {
                         activeMonsters.RemoveAt(i);
 
                         //! Loot Code - move to its own thing
                         activeItems.Add(Generate.Potion());
-
                         activeItems[activeItems.Count - 1].X = NextTile.X;
                         activeItems[activeItems.Count - 1].Y = NextTile.Y;
-
-                        NextTile.Icon = "*"; //test icon
                     }
                 }
             }
+            return activeItems;
         }
 
         public void MoveMonster(DungeonMap map, List<Monster> activeMonsters)
@@ -1161,5 +1179,64 @@ namespace GreenBottle
             Tile CurrentTile = GameMap[player.X, player.Y];
             CurrentTile.IsItem = false;
         }
+
+
+
+
+
+        public void UpdateDoorIcons()
+        {
+            for (int x = 0; x <= MapSizeX - 1; x++)
+            {
+                for (int y = 0; y <= MapSizeY - 1; y++)
+                {
+                    Tile CurrentTile = (Tile)GameMap[x, y];
+
+                    if (CurrentTile.IsDoor) // if current tile is a door then set to doo icon
+                    {
+                        CurrentTile.Icon = DoorIcon;
+                    }
+                }
+            }
+        }
+
+        public void UpdatePlayerIcon(Player player)
+        {
+            for (int x = 0; x <= MapSizeX - 1; x++)
+            {
+                for (int y = 0; y <= MapSizeY - 1; y++)
+                {
+                    Tile CurrentTile = (Tile)GameMap[x, y];
+
+                    if (CurrentTile.X == player.X & CurrentTile.Y == player.Y) //if current tile is player then set to player icon
+                    {
+                        CurrentTile.Icon = player.Icon;
+                    }
+                }
+            }
+        }
+
+        public void UpdateItems(List<Item> activeItems)
+        {
+            for (int i = 0; i < activeItems.Count; i++)
+            {
+                Tile CurrentTile = GameMap[activeItems[i].X, activeItems[i].Y]; //if current tile is a item then set to item icon
+
+                CurrentTile.Icon = activeItems[i].Icon;
+            }
+        }
+
+        public void UpdateMonsters(List<Monster> activeMonsters)
+        {
+            for (int i = 0; i < activeMonsters.Count; i++)
+            {
+                Tile CurrentTile = GameMap[activeMonsters[i].X, activeMonsters[i].Y]; //if current tile is a monster then set to monster item
+
+                CurrentTile.Icon = activeMonsters[i].Icon;
+            }
+        }
+
+
+
     }
 }

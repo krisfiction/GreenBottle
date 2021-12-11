@@ -272,7 +272,7 @@ namespace GreenBottle
                 //newPlayerPosition += SadConsole.Directions.North;
                 _moveKeyPressed = true;
                 _moveKeyDirection = "North";
-                ActivityLog.AddToLog("You move North.");
+                //ActivityLog.AddToLog("You move North.");
                 // }
                 //UpdateDisplay();
                 //MapConsole.IsDirty = true;
@@ -285,7 +285,7 @@ namespace GreenBottle
                 //newPlayerPosition += SadConsole.Directions.South;
                 _moveKeyPressed = true;
                 _moveKeyDirection = "South";
-                ActivityLog.AddToLog("You move South.");
+                //ActivityLog.AddToLog("You move South.");
                 //}
             }
 
@@ -296,7 +296,7 @@ namespace GreenBottle
                 //    newPlayerPosition += SadConsole.Directions.West;
                 _moveKeyPressed = true;
                 _moveKeyDirection = "West";
-                ActivityLog.AddToLog("You move West.");
+                //ActivityLog.AddToLog("You move West.");
                 //}
             }
 
@@ -307,7 +307,7 @@ namespace GreenBottle
                 //    newPlayerPosition += SadConsole.Directions.East;
                 _moveKeyPressed = true;
                 _moveKeyDirection = "East";
-                ActivityLog.AddToLog("You move East.");
+                //ActivityLog.AddToLog("You move East.");
                 //}
             }
 
@@ -318,7 +318,7 @@ namespace GreenBottle
                 //    newPlayerPosition += SadConsole.Directions.NorthWest;
                 _moveKeyPressed = true;
                 _moveKeyDirection = "NorthWest";
-                ActivityLog.AddToLog("You move NorthWest.");
+                //ActivityLog.AddToLog("You move NorthWest.");
                 //}
             }
 
@@ -329,7 +329,7 @@ namespace GreenBottle
                 //    newPlayerPosition += SadConsole.Directions.NorthEast;
                 _moveKeyPressed = true;
                 _moveKeyDirection = "NorthEast";
-                ActivityLog.AddToLog("You move NorthEast.");
+                //ActivityLog.AddToLog("You move NorthEast.");
                 //}
             }
 
@@ -340,7 +340,7 @@ namespace GreenBottle
                 //    newPlayerPosition += SadConsole.Directions.SouthWest;
                 _moveKeyPressed = true;
                 _moveKeyDirection = "SouthWest";
-                ActivityLog.AddToLog("You move SouthWest.");
+                //ActivityLog.AddToLog("You move SouthWest.");
                 //}
             }
 
@@ -351,7 +351,7 @@ namespace GreenBottle
                 //    newPlayerPosition += SadConsole.Directions.SouthEast;
                 _moveKeyPressed = true;
                 _moveKeyDirection = "SouthEast";
-                ActivityLog.AddToLog("You move SouthEast.");
+                //ActivityLog.AddToLog("You move SouthEast.");
                 //}
             }
             if (_moveKeyPressed) //if a moved key is pressed do this
@@ -417,11 +417,27 @@ namespace GreenBottle
             //    return true;
             //}
 
+
+
+            // make a update method
+            // update doors
+            // update items
+            // update monsters
+            // update player
+            // in that order and overwrite pevious if in same spot (aka player (or monster) should show over a item or a door)
+            DungeonMap.UpdateDoorIcons();
+            DungeonMap.UpdateItems(activeItems);
+            DungeonMap.UpdateMonsters(activeMonsters);
+            DungeonMap.UpdatePlayerIcon(Player);
+           
+
             UpdateDisplay();
             //ActivityLog.Display(ActivityLogConsole);
 
             return false;
         }
+
+       
 
         public void UpdateDisplay()
         {
