@@ -55,8 +55,8 @@ namespace GreenBottle
 
         private readonly Random random = new Random();
 
-        private static List<Monster> activeMonsters = new List<Monster>();
-        private static List<Item> activeItems = new List<Item>();
+        private static readonly List<Monster> activeMonsters = new List<Monster>();
+        private static readonly List<Item> activeItems = new List<Item>();
 
         //public Point PlayerPosition //? redo this or get rid of it
         //{
@@ -186,8 +186,6 @@ namespace GreenBottle
             UpdateDisplay();
 
             CreatePlayer();
-
-            //UpdateDisplay();
         }
 
         public void CreatePlayer()
@@ -215,28 +213,27 @@ namespace GreenBottle
         }
 
         //check if random starting position is walkable and not a hallway
-        public Point RandomPosition()
-        {
-            bool _isWalkable;
-            bool _isHallway;
-            Point _point;
+        //public Point RandomPosition()
+        //{
+        //    bool _isWalkable;
+        //    bool _isHallway;
+        //    Point _point;
 
-            do
-            {
-                do
-                {
-                    _point.X = random.Next(0, mapConsoleWidth - 1);
-                    _point.Y = random.Next(0, mapConsoleHeight - 1);
-                    _isHallway = DungeonMap.IsHallway(_point.X, _point.Y);
-                    _isWalkable = DungeonMap.IsWalkable(_point.X, _point.Y);
-                } while (_isHallway);
-            } while (!_isWalkable);
-            //} while (_isHallway && !_isWalkable); // broken
+        //    do
+        //    {
+        //        do
+        //        {
+        //            _point.X = random.Next(0, mapConsoleWidth - 1);
+        //            _point.Y = random.Next(0, mapConsoleHeight - 1);
+        //            _isHallway = DungeonMap.IsHallway(_point.X, _point.Y);
+        //            _isWalkable = DungeonMap.IsWalkable(_point.X, _point.Y);
+        //        } while (_isHallway);
+        //    } while (!_isWalkable);
+        //    //} while (_isHallway && !_isWalkable); // broken
 
-            //MapConsole.Print(1, 1, $"isHallway: {_isHallway}, isWalkable: {_isWalkable}"); //testing
 
-            return _point;
-        }
+        //    return _point;
+        //}
 
         public override bool ProcessKeyboard(Keyboard info)
         {
