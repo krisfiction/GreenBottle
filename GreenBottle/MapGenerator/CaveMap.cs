@@ -25,12 +25,12 @@ namespace GreenBottle
         {
             if (_map == "Temp")
             {
-                TempMap[_x, _y] = new Tile(_x, _y, FloorIcon, false, true, false, false, false);
+                TempMap[_x, _y] = new Tile(_x, _y, FloorIcon, false, false, true, false, false, false);
             }
 
             if (_map == "Game")
             {
-                GameMap[_x, _y] = new Tile(_x, _y, FloorIcon, false, true, false, false, false);
+                GameMap[_x, _y] = new Tile(_x, _y, FloorIcon, false, false, true, false, false, false);
             }
         }
 
@@ -38,12 +38,12 @@ namespace GreenBottle
         {
             if (_map == "Temp")
             {
-                TempMap[_x, _y] = new Tile(_x, _y, WallIcon, true, false, false, false, false);
+                TempMap[_x, _y] = new Tile(_x, _y, WallIcon, false, true, false, false, false, false);
             }
 
             if (_map == "Game")
             {
-                GameMap[_x, _y] = new Tile(_x, _y, WallIcon, true, false, false, false, false);
+                GameMap[_x, _y] = new Tile(_x, _y, WallIcon, false, true, false, false, false, false);
             }
         }
 
