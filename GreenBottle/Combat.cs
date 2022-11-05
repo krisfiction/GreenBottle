@@ -30,7 +30,7 @@ namespace GreenBottle
         public static void MonsterAttacks(Player player, Monster monster)
         {
             player.Health -= 5;
-            ActivityLog.AddToLog($"{monster.Name} [{monster.Health}/{monster.HealthMax}] hits {player.Name} for 5 damage.");
+            ActivityLog.AddToLog($"{monster.Name} [{monster.Health}/{monster.HealthMax}] hits {player.Name} [{player.Health}/{player.HealthMax}] for 5 damage.");
            // StatBar.Display(player);
         }
 

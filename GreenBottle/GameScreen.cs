@@ -4,11 +4,14 @@ using GreenBottle.Items;
 using GreenBottle.Items.Potions;
 using GreenBottle.Items.Scrolls;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using SadConsole;
 using SadConsole.Input;
 using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata;
 using Console = SadConsole.Console;
+
 
 namespace GreenBottle
 {
@@ -37,6 +40,9 @@ namespace GreenBottle
         public const int InventoryConsoleHeight = 25; //needs updated
         public const int InventoryConsolePOSx = 110; // needs updated
         public const int InventoryConsolePOSy = 21; // needs updated
+
+        public Console _spellList;
+
 
         public DungeonMap DungeonMap;
 
@@ -121,6 +127,15 @@ namespace GreenBottle
                 DefaultBackground = Color.Black,
                 Parent = this
             };
+
+            _spellList = new Console(20, 15)
+            {
+                Position = new Point(5, 5),
+                DefaultBackground = Color.AliceBlue,
+                IsVisible = false
+            };
+
+            Children.Add(_spellList);
 
             StartGame();
         }
@@ -235,12 +250,29 @@ namespace GreenBottle
         //    return _point;
         //}
 
-        public override bool ProcessKeyboard(Keyboard info)
+        public override bool ProcessKeyboard(SadConsole.Input.Keyboard info)
         {
             //Point newPlayerPosition = PlayerPosition;
 
             bool _moveKeyPressed = false;
             string _moveKeyDirection = null;
+
+
+            if (_spellList.IsVisible == true) // tetsing to see if keys can work differently when specific windows are visible
+            {
+                if (info.IsKeyPressed(Keys.A))
+                {
+                    ActivityLog.AddToLog("You cast a spell.");
+
+                    _spellList.IsVisible = false;
+
+                    return true;
+                }
+
+            }
+
+
+
 
             if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.F5))
             {
@@ -400,6 +432,22 @@ namespace GreenBottle
                         ActivityLog.AddToLog("pick up loot");
                     }
                 }
+            }
+
+            if (info.IsKeyPressed(Keys.C)) // (C)ast a spell
+            {
+                ActivityLog.AddToLog("You open your spell book.");
+
+                //AddTextToSpellList();
+
+                if (_spellList.IsVisible == false)
+                {
+                    _spellList.IsVisible = true;
+                }
+                else
+                    _spellList.IsVisible = false;
+
+                //handled = true;
             }
 
             //DungeonMap.LightRadius(MapConsole, _playerPosition.X, _playerPosition.Y); //testing
