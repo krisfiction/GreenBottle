@@ -41,13 +41,18 @@ namespace GreenBottle
         public const int InventoryConsolePOSx = 110; // needs updated
         public const int InventoryConsolePOSy = 21; // needs updated
 
-        public Console _spellList;
-
+        public Console SpellConsole { get; }
+        public const int spConsoleWidth = 30;
+        public const int spConsoleHeight = 25; //needs updated
+        public const int spConsolePOSx = 110; // needs updated
+        public const int spConsolePOSy = 21; // needs updated
 
         public DungeonMap DungeonMap;
 
         //public ActivityLog ActivityLog;
         public Stats Stats;
+
+        public SpellWindow SpellWindow;
 
         public Player Player;
         public Inventory Inventory;
@@ -95,12 +100,14 @@ namespace GreenBottle
             Stats = new Stats(); //? make static as well
             Player = new Player();
             Inventory = new Inventory();
+            SpellWindow = new SpellWindow();
 
             // Setup map
             MapConsole = new Console(mapConsoleWidth, mapConsoleHeight) //size of window
             {
                 Position = new Point(mapConsolePOSx, mapConsolePOSy), //position of window
-                DefaultBackground = Color.Transparent,
+                DefaultBackground = Color.Black,
+                DefaultForeground = Color.Red,
                 Parent = this
             };
 
@@ -109,7 +116,7 @@ namespace GreenBottle
             {
                 Position = new Point(ActivityLogConsolePOSx, ActivityLogConsolePOSy), //position of window
                 DefaultBackground = Color.Black,
-                DefaultForeground = Color.White,
+                DefaultForeground = Color.Red,
                 Parent = this
             };
 
@@ -118,6 +125,7 @@ namespace GreenBottle
             {
                 Position = new Point(StatsConsolePOSx, StatsConsolePOSy), //position of window = 110, 0
                 DefaultBackground = Color.Black,
+                DefaultForeground = Color.Red,
                 Parent = this
             };
 
@@ -125,17 +133,22 @@ namespace GreenBottle
             {
                 Position = new Point(InventoryConsolePOSx, InventoryConsolePOSy),
                 DefaultBackground = Color.Black,
+                DefaultForeground= Color.Red,
                 Parent = this
             };
 
-            _spellList = new Console(20, 15)
+
+           
+            SpellConsole = new Console(20, 15)
             {
                 Position = new Point(5, 5),
-                DefaultBackground = Color.AliceBlue,
-                IsVisible = false
+                DefaultBackground = Color.Blue,
+                DefaultForeground= Color.Red,
+                IsVisible = false,
+                Parent = this
             };
 
-            Children.Add(_spellList);
+            //Children.Add(SpellConsole);
 
             StartGame();
         }
@@ -258,13 +271,13 @@ namespace GreenBottle
             string _moveKeyDirection = null;
 
 
-            if (_spellList.IsVisible == true) // tetsing to see if keys can work differently when specific windows are visible
+            if (SpellConsole.IsVisible == true) // tetsing to see if keys can work differently when specific windows are visible
             {
                 if (info.IsKeyPressed(Keys.A))
                 {
                     ActivityLog.AddToLog("You cast a spell.");
 
-                    _spellList.IsVisible = false;
+                    SpellConsole.IsVisible = false;
 
                     return true;
                 }
@@ -438,14 +451,13 @@ namespace GreenBottle
             {
                 ActivityLog.AddToLog("You open your spell book.");
 
-                //AddTextToSpellList();
-
-                if (_spellList.IsVisible == false)
+                if (SpellConsole.IsVisible == false)
                 {
-                    _spellList.IsVisible = true;
+                    ActivityLog.AddToLog("spell book opened");
+                    SpellConsole.IsVisible = true;
                 }
                 else
-                    _spellList.IsVisible = false;
+                    SpellConsole.IsVisible = false;
 
                 //handled = true;
             }
@@ -490,11 +502,17 @@ namespace GreenBottle
             ActivityLog.Display(ActivityLogConsole);
             Stats.Display(StatsConsole);
             Inventory.Display(InventoryConsole, Player, DungeonMap, "all");
+            
+            SpellWindow.Display(SpellConsole);
+            //SpellWindow.Display(InventoryConsole);
+            
 
             //? is this needed
             MapConsole.IsDirty = true;
             ActivityLogConsole.IsDirty = true;
             StatsConsole.IsDirty = true;
+
+            SpellConsole.IsDirty = true;
         }
     }
 }
