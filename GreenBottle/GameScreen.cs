@@ -6,12 +6,9 @@ using GreenBottle.Items.Scrolls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using SadConsole;
-using SadConsole.Input;
 using System;
 using System.Collections.Generic;
-using System.Reflection.Metadata;
 using Console = SadConsole.Console;
-
 
 namespace GreenBottle
 {
@@ -107,7 +104,7 @@ namespace GreenBottle
             {
                 Position = new Point(mapConsolePOSx, mapConsolePOSy), //position of window
                 DefaultBackground = Color.Black,
-                DefaultForeground = Color.Red,
+                DefaultForeground = Color.White,
                 Parent = this
             };
 
@@ -116,7 +113,7 @@ namespace GreenBottle
             {
                 Position = new Point(ActivityLogConsolePOSx, ActivityLogConsolePOSy), //position of window
                 DefaultBackground = Color.Black,
-                DefaultForeground = Color.Red,
+                DefaultForeground = Color.White,
                 Parent = this
             };
 
@@ -125,7 +122,7 @@ namespace GreenBottle
             {
                 Position = new Point(StatsConsolePOSx, StatsConsolePOSy), //position of window = 110, 0
                 DefaultBackground = Color.Black,
-                DefaultForeground = Color.Red,
+                DefaultForeground = Color.White,
                 Parent = this
             };
 
@@ -133,17 +130,15 @@ namespace GreenBottle
             {
                 Position = new Point(InventoryConsolePOSx, InventoryConsolePOSy),
                 DefaultBackground = Color.Black,
-                DefaultForeground= Color.Red,
+                DefaultForeground = Color.White,
                 Parent = this
             };
 
-
-           
             SpellConsole = new Console(20, 15)
             {
                 Position = new Point(5, 5),
-                DefaultBackground = Color.Blue,
-                DefaultForeground= Color.Red,
+                DefaultBackground = Color.White,
+                DefaultForeground = Color.Black,
                 IsVisible = false,
                 Parent = this
             };
@@ -189,7 +184,7 @@ namespace GreenBottle
             //END monster code
 
             //START item code
-            activeItems.Clear(); //reset code for f5
+            activeItems.Clear(); //reset code for when f5 is used (f5 = redo map)
 
             for (int i = 0; i < 3; i++)
             {
@@ -259,7 +254,6 @@ namespace GreenBottle
         //    } while (!_isWalkable);
         //    //} while (_isHallway && !_isWalkable); // broken
 
-
         //    return _point;
         //}
 
@@ -269,7 +263,6 @@ namespace GreenBottle
 
             bool _moveKeyPressed = false;
             string _moveKeyDirection = null;
-
 
             if (SpellConsole.IsVisible == true) // tetsing to see if keys can work differently when specific windows are visible
             {
@@ -281,11 +274,7 @@ namespace GreenBottle
 
                     return true;
                 }
-
             }
-
-
-
 
             if (info.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.F5))
             {
@@ -462,6 +451,14 @@ namespace GreenBottle
                 //handled = true;
             }
 
+            //test for > for move down a level
+            if (info.IsKeyDown(Keys.LeftShift) && (info.IsKeyPressed(Keys.OemPeriod)))
+            {
+                ActivityLog.AddToLog("it worked");
+            }
+
+
+
             //DungeonMap.LightRadius(MapConsole, _playerPosition.X, _playerPosition.Y); //testing
 
             //if (newPlayerPosition != PlayerPosition)
@@ -474,8 +471,6 @@ namespace GreenBottle
             //    return true;
             //}
 
-
-
             // make a update method
             // update doors
             // update items
@@ -486,7 +481,6 @@ namespace GreenBottle
             DungeonMap.UpdateItems(activeItems);
             DungeonMap.UpdateMonsters(activeMonsters);
             DungeonMap.UpdatePlayerIcon(Player);
-           
 
             UpdateDisplay();
             //ActivityLog.Display(ActivityLogConsole);
@@ -494,18 +488,15 @@ namespace GreenBottle
             return false;
         }
 
-       
-
         public void UpdateDisplay()
         {
             DungeonMap.Display(MapConsole);
             ActivityLog.Display(ActivityLogConsole);
             Stats.Display(StatsConsole);
             Inventory.Display(InventoryConsole, Player, DungeonMap, "all");
-            
+
             SpellWindow.Display(SpellConsole);
             //SpellWindow.Display(InventoryConsole);
-            
 
             //? is this needed
             MapConsole.IsDirty = true;
