@@ -18,6 +18,7 @@ namespace GreenBottle
         public static void Display(Console _console, Player player, DungeonMap map, string _type)
         {
             int _row = 0;
+            _console.Clear();
 
             _console.Print(1, _row, "Inventory:");
             _row++;

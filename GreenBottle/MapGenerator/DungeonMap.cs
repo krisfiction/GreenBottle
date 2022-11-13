@@ -752,6 +752,8 @@ namespace GreenBottle
 
         public void Display(Console console)
         {
+            console.Clear();
+
             for (int x = 0; x <= MapSizeX - 1; x++)
             {
                 for (int y = 0; y <= MapSizeY - 1; y++)
