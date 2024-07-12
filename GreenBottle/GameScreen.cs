@@ -8,12 +8,16 @@ using Microsoft.Xna.Framework.Input;
 using SadConsole;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using Console = SadConsole.Console;
 
 namespace GreenBottle
 {
     public class GameScreen : ContainerConsole
     {
+        public bool TestRoom = true;
+
+
         public Console MapConsole { get; }
         public const int mapConsoleWidth = 110;
         public const int mapConsoleHeight = 35;
@@ -161,8 +165,16 @@ namespace GreenBottle
 
             //DungeonMap dungeonMap = new DungeonMap();
 
-            DungeonMap.Initialize();
-            //dungeonMap.CreateOneRoom();
+            // one room for testing
+            if (TestRoom)
+            {
+                DungeonMap.CreateOneRoom();
+            }
+            else
+            {
+                DungeonMap.Initialize();
+            }
+
 
             //START monster coode
             activeMonsters.Clear(); //reset code for f5
@@ -268,7 +280,7 @@ namespace GreenBottle
             {
                 if (info.IsKeyPressed(Keys.A))
                 {
-                    ActivityLog.AddToLog("You cast a spell.");
+                    ActivityLog.AddToLog("You cast a Heal.");
 
                     SpellConsole.IsVisible = false;
 

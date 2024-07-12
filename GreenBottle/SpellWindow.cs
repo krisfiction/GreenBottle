@@ -14,7 +14,7 @@ namespace GreenBottle
             row++;
             row++;
 
-            _console.Print(1, row, "more spells");
+            _console.Print(1, row, "a) Heal");
             row++;
             row++;
 
